@@ -1,3 +1,5 @@
+// created by Arthur Sonzogni
+
 #ifndef DEF_FRAMEBUFFER
 #define DEF_FRAMEBUFFER
 

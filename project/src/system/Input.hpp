@@ -1,3 +1,5 @@
+// created by Arthur Sonzogni
+
 #ifndef INPUT_QHZPGW1N
 #define INPUT_QHZPGW1N
 

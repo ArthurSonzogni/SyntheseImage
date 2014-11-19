@@ -1,3 +1,5 @@
+// created by Arthur Sonzogni
+
 #include <exception>
 #include <iostream>
 

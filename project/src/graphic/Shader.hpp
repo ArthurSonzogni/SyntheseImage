@@ -1,3 +1,5 @@
+// created by Arthur Sonzogni
+
 #ifndef SHADER_F8X43H2W
 #define SHADER_F8X43H2W
 

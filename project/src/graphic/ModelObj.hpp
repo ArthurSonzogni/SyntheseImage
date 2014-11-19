@@ -1,3 +1,5 @@
+// created by Arthur Sonzogni
+
 #ifndef MODELOBJ_IZ6KZI5P
 #define MODELOBJ_IZ6KZI5P
 
