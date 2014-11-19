@@ -6,6 +6,7 @@ uniform sampler2D normalMap;
 
 in vec2 fTexCoord;
 in vec3 fLightPosition;
+in float fRadius;
 
 void main()
 {
@@ -25,7 +26,7 @@ void main()
     if (diffuseCoef>0.f) light += 0.5;
 
     /*gl_FragColor = vec4(position,1.0);*/
-    light *= 1.f - length(fLightDirection);
+    light *= (fRadius - length(fLightDirection))/fRadius;
 
     gl_FragColor = color * light;
 } 

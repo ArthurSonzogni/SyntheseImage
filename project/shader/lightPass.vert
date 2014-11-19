@@ -12,12 +12,14 @@ uniform float lightRadius = 3.0;
 
 out vec2 fTexCoord;
 out vec3 fLightPosition;
+out float fRadius;
 
 void main()
 {
     vec4 worldPos = view * model * vec4(position,1.0);
 
     fLightPosition = (view * model * vec4(lightPosition,1.0)).xyz;
+    fRadius = lightRadius;
 
     gl_Position = projection * worldPos;
 

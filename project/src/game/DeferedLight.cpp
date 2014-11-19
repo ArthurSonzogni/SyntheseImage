@@ -27,17 +27,22 @@ void DeferedLight::populateLight()
     {
         Light l;
         l.position = glm::vec3(i,0,i);
-        l.radius = 30.f;
+        l.radius = 3.f;
         lights.push_back(l);
     }
 }
 
 void DeferedLight::animateLight()
 {
+    float t = getTime();
     for(int i = 0; i<lights.size(); ++i)
     {
-        lights[i].position = glm::vec3(3.f*i*cos(-i*0.1),0.5f,3.f*i*sin(-i*0.1));
+        lights[i].position = glm::vec3(3.f*i*cos(-i*t),1.f,3.f*i*sin(-i*t));
     }
+
+    lights[0].position = glm::vec3(1.0,5.0,3.0);
+    lights[0].radius = 5.f;
+
 }
 
 void DeferedLight::secondPass()
@@ -64,9 +69,8 @@ void DeferedLight::secondPass()
     {
         sphere.getShader().use();
         sphere.getShader().setUniform("lightRadius",lights[i].radius);
-        sphere.getShader().setUniform("view",glm::translate(view,lights[i].position));
+        sphere.getShader().setUniform("view",glm::scale(glm::translate(view,lights[i].position),glm::vec3(lights[i].radius)));
         sphere.getShader().setUniform("lightPosition",glm::vec3(0.0));
         sphere.draw();
     }
 }
-

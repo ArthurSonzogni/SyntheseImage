@@ -6,8 +6,8 @@
 #define THETA_MIN -170*2*M_PI/360
 #define R_MIN 0.1
 
-float Camera::THETA_MULTIPLIER = 0.1;
-float Camera::PHI_MULTIPLIER = 0.1;
+float Camera::THETA_MULTIPLIER = 0.01;
+float Camera::PHI_MULTIPLIER = 0.01;
 float Camera::ZOOM_MULTIPLIER = 0.1;
 float Camera::TRANSLATION_MULTIPLIER = 0.1;
 
