@@ -1,18 +1,21 @@
 #ifndef APPLICATION3D_3KYVM1W4
 #define APPLICATION3D_3KYVM1W4
-#include "system/DeferedBase.hpp"
+#include "system/Application.hpp"
 #include "graphic/FrameBuffer.hpp"
+#include "graphic/ModelObj.hpp"
 
 class ShaderProgram;
 
-class Application3D : public DeferedBase
+class Application3D : public Application
 {
     public:
         Application3D();
 
     protected:
         void loop();
+        FrameBuffer framebuffer;
         ModelObj obj;
+        ModelObj screenObj;
         GLuint texture;
 };
 
