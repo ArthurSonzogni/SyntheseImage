@@ -15,5 +15,3 @@ Application3D::Application3D():
 {
     glCheckError(__FILE__,__LINE__);
 }
-
-

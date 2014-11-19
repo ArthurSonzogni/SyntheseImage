@@ -21,6 +21,8 @@ class Input
         static bool isMouseHold(int key);
         static double mouseX();
         static double mouseY();
+        static double deltaX();
+        static double deltaY();
         static void setMousePos(double x, double y); // relative
 
         static void fixMouse();
