@@ -1,3 +1,5 @@
+// created by Arthur Sonzogni
+
 #ifndef GLERROR_J4YD6FVF
 #define GLERROR_J4YD6FVF
 

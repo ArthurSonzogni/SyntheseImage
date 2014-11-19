@@ -1,3 +1,5 @@
+// created by Arthur Sonzogni
+
 #ifndef __TEXTUREMANAGER_H__
 #define __TEXTUREMANAGER_H__
 
