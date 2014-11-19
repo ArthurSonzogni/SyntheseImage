@@ -47,6 +47,10 @@ void DeferedBase::loop()
         secondPass();
 
     }
+	if(Input::isKeyHold(GLFW_KEY_ESCAPE))
+	{
+		exit();
+	}
 }
 
 void DeferedBase::firstPass()
