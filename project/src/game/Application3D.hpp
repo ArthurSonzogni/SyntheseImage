@@ -3,6 +3,7 @@
 #include "system/Application.hpp"
 #include "graphic/FrameBuffer.hpp"
 #include "graphic/ModelObj.hpp"
+#include "Camera.hpp"
 
 class ShaderProgram;
 
@@ -17,6 +18,7 @@ class Application3D : public Application
         ModelObj obj;
         ModelObj screenObj;
         GLuint texture;
+		Camera *camera;
 };
 
 #endif /* end of include guard: APPLICATION3D_3KYVM1W4 */

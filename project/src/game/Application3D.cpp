@@ -20,14 +20,17 @@ Application3D::Application3D():
         "shader/compose.vert",
         "shader/compose.frag"
     )),
-    framebuffer(getWidth(),getHeight(),3)
+    framebuffer(getWidth(),getHeight(),3),
+	camera(NULL)
 {
+	camera = new Camera();
     glCheckError(__FILE__,__LINE__);
 }
 
 void Application3D::loop()
 {
     Input::update(getWindow());
+	camera->update();
 
     //===== First Pass ====//
     framebuffer.bindToWrite();
@@ -41,11 +44,7 @@ void Application3D::loop()
     t+=0.02;
     obj.getShader().use();
     obj.getShader().setUniform("projection", glm::perspective(70.0f, 640.0f/480.0f, 0.1f, 100.0f));
-    obj.getShader().setUniform("view", glm::lookAt(
-        glm::vec3(10.0*sin(t),5.0,10.0*cos(t)),
-        glm::vec3(0.0,3,0.0),
-        glm::vec3(0.0,1.0,0.0)
-    ));
+    obj.getShader().setUniform("view", camera->lookAt(glm::vec3(0.0, 3.0, 0.0)));
 
     obj.draw();
 

@@ -14,6 +14,8 @@ map<int,pair<int,int> > keyState;
 map<int,pair<int,int> > mouseState;
 double m_mouseX;
 double m_mouseY;
+double m_deltaX = 0.0;
+double m_deltaY = 0.0;
 
 void Input::update(GLFWwindow* window)
 {
@@ -39,8 +41,12 @@ void Input::update(GLFWwindow* window)
         it->second.first  = glfwGetMouseButton(window,it->first);
     }
 
+	double oldX = m_mouseX;
+	double oldY = m_mouseY;
     // update mouse coords
     glfwGetCursorPos(window, &m_mouseX, &m_mouseY);
+	m_deltaX = m_mouseX - oldX;
+	m_deltaY = m_mouseY - oldY;
 }
 
 
@@ -94,4 +100,14 @@ double Input::mouseX()
 double Input::mouseY()
 {
     return m_mouseY;
+}
+
+double Input::deltaX()
+{
+    return m_deltaX;
+}
+
+double Input::deltaY()
+{
+    return m_deltaY;
 }
