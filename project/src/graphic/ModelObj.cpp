@@ -18,7 +18,7 @@ ModelObj::ModelObj(const char * filename, ShaderProgram& _shader):
     hasTexture(false),
     shader(_shader),
     texture(Texture::loadFromFile(
-        "texture/texture.png"
+        "texture/brick.jpg"
     ))
 {
     shader.use();

@@ -51,7 +51,7 @@ void DeferedBase::loop()
 
 void DeferedBase::firstPass()
 {
-    cout << "second pass" << endl;
+    cout << "first pass" << endl;
 }
 
 void DeferedBase::secondPass()

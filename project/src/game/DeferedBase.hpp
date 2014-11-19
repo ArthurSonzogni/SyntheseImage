@@ -6,7 +6,6 @@ class DeferedBase : public Application
 {
     public:
         DeferedBase();
-        
 
     protected:
 
@@ -16,4 +15,5 @@ class DeferedBase : public Application
 
         FrameBuffer framebuffer;
         ModelObj screenObj;
+
 };

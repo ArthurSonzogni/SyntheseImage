@@ -1,10 +1,10 @@
 #ifndef APPLICATION3D_3KYVM1W4
 #define APPLICATION3D_3KYVM1W4
-#include "game/DeferedFirstPass.hpp"
+#include "game/DeferedLight.hpp"
 
 class ShaderProgram;
 
-class Application3D : public DeferedFirstPass
+class Application3D : public DeferedLight
 {
     public:
         Application3D();

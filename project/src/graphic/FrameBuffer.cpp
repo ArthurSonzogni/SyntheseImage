@@ -13,6 +13,9 @@ FrameBuffer::FrameBuffer(unsigned int _width,unsigned int _height, unsigned int 
     height(_height),
     colorTextures(colorAttachment)
 {
+    fbo = 0;
+    depthTexture = 0;
+
     allocate();
 }
 
@@ -113,7 +116,6 @@ void FrameBuffer::disallocate()
 void FrameBuffer::bindToWrite()
 {
     glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fbo);
-    glCheckError(__FILE__,__LINE__);
 }
 
 void FrameBuffer::bindToRead()

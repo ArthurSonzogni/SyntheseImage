@@ -11,7 +11,7 @@ using namespace std;
 
 
 Application3D::Application3D():
-    DeferedFirstPass()
+    DeferedLight()
 {
     glCheckError(__FILE__,__LINE__);
 }
