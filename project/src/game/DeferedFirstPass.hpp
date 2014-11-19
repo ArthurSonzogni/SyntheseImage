@@ -3,6 +3,7 @@
 
 #include "game/DeferedBase.hpp"
 #include "utils/glm.hpp"
+#include "game/Camera.hpp"
 
 class ShaderProgram;
 
@@ -20,6 +21,7 @@ class DeferedFirstPass : public DeferedBase
         glm::mat4 projection;
         glm::mat4 view;
         glm::mat4 model;
+		Camera *camera;
 };
 
 
