@@ -1,22 +1,15 @@
 #ifndef APPLICATION3D_3KYVM1W4
 #define APPLICATION3D_3KYVM1W4
-#include "system/Application.hpp"
-#include "graphic/FrameBuffer.hpp"
-#include "graphic/ModelObj.hpp"
+#include "game/DeferedFirstPass.hpp"
 
 class ShaderProgram;
 
-class Application3D : public Application
+class Application3D : public DeferedFirstPass
 {
     public:
         Application3D();
 
     protected:
-        void loop();
-        FrameBuffer framebuffer;
-        ModelObj obj;
-        ModelObj screenObj;
-        GLuint texture;
 };
 
 #endif /* end of include guard: APPLICATION3D_3KYVM1W4 */
