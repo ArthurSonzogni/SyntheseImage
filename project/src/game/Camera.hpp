@@ -8,13 +8,18 @@ class Camera
 		static float THETA_MULTIPLIER;
 		static float PHI_MULTIPLIER;
 		static float ZOOM_MULTIPLIER;
+		static float TRANSLATION_MULTIPLIER;
 		float r;
 		float theta;
 		float phi;
+		glm::vec3 target;
 	public:
 		Camera();
 		void update();
-		glm::mat4 lookAt(glm::vec3 target = glm::vec3(0.0,0.0,0.0));
+		glm::mat4 lookAt();
+		void setTarget(glm::vec3 target);
+		void setTheta(float theta);
+		void setPhi(float phi);
 };
 
 #endif

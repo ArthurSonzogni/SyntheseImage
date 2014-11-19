@@ -16,7 +16,7 @@ SET(CMAKE_BUILD_TYPE "DEBUG")
   ##add_definitions(-DNTWBAR)
 #endif()
 
-project(StrangeMansion)
+project(OpenGL)
 
 # bin dir
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
@@ -99,7 +99,7 @@ file(GLOB_RECURSE source_files ${SRC}/*)
 #endif()
 
 # Testing executable
-set(EXEC StrangeMansion)
+set(EXEC OpenGL)
 add_executable(
   ${EXEC}
   ${source_files}
@@ -109,12 +109,13 @@ add_executable(
 find_package(OpenGL REQUIRED)
 find_package(glfw3 REQUIRED)
 find_package(GLEW REQUIRED)
+find_package(AntTweakBar REQUIRED)
 SET(CMAKE_FIND_FRAMEWORK NEVER)
 find_package(SFML 2 COMPONENTS system REQUIRED)
 include_directories( ${OPENGL_INCLUDE_DIRS} ${GLEW_INCLUDE_PATH} ${GLFW_INCLUDE_DIR} ${SFML_INCLUDE_DIR})
 
 # libs
-target_link_libraries(${EXEC} ${GLEW_LIBRARY} ${GLFW_LIBRARIES} ${OPENGL_LIBRARIES} ${SFML_LIBRARIES})
+target_link_libraries(${EXEC} ${GLEW_LIBRARY} ${GLFW_LIBRARIES} ${OPENGL_LIBRARIES} ${SFML_LIBRARIES} ${ANTTWEAKBAR_LIBRARY})
 
 add_custom_target(run
     COMMAND ${EXECUTABLE_OUTPUT_PATH}/${EXEC}

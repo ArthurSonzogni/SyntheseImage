@@ -23,6 +23,7 @@ DeferedFirstPass::DeferedFirstPass():
 	camera(NULL)
 {
 	camera = new Camera();
+	camera->setTarget(glm::vec3(0.0, 3.0, 0.0));
     glCheckError(__FILE__,__LINE__);
 }
 
@@ -30,7 +31,7 @@ DeferedFirstPass::DeferedFirstPass():
 void DeferedFirstPass::firstPass()
 {
 	camera->update();
-	view = camera->lookAt(glm::vec3(0.0,3.0,0.0));
+	view = camera->lookAt();
 
     projection = glm::perspective(70.0f, 640.0f/480.0f, 0.1f, 100.0f);
     obj.getShader().use();
