@@ -1,6 +1,7 @@
 #include "system/Application.hpp"
 #include "graphic/FrameBuffer.hpp"
 #include "graphic/ModelObj.hpp"
+#include <AntTweakBar.h>
 
 class DeferedBase : public Application
 {
@@ -15,5 +16,7 @@ class DeferedBase : public Application
 
         FrameBuffer framebuffer;
         ModelObj screenObj;
+
+		TwBar *menuBar;
 
 };

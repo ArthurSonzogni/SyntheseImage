@@ -8,77 +8,77 @@
 
 using namespace std;
 
-
 DeferedBase::DeferedBase():
-    Application(),
-    framebuffer(getWidth(),getHeight(),3),
-    screenObj("obj/screen.obj",ShaderProgram::loadFromFile(
-        "shader/compose.vert",
-        "shader/compose.frag"
-    ))
+	Application(),
+	framebuffer(getWidth(),getHeight(),3),
+	screenObj("obj/screen.obj",ShaderProgram::loadFromFile(
+				"shader/compose.vert",
+				"shader/compose.frag"
+				)),
+	menuBar(NULL)
 {
-    glCheckError(__FILE__,__LINE__);
+	TwInit(TW_OPENGL_CORE, NULL);
+	TwWindowSize(getWidth(), getHeight());
+	menuBar = TwNewBar("Coucou");
+	glCheckError(__FILE__,__LINE__);
+
+	glfwSetMouseButtonCallback((GLFWmousebuttonfun)TwEventMouseButtonGLFW);
+	glfwSetMousePosCallback((GLFWmouseposfun)TwEventMousePosGLFW);
+	glfwSetMouseWheelCallback((GLFWmousewheelfun)TwEventMouseWheelGLFW);
+	glfwSetKeyCallback((GLFWkeyfun)TwEventKeyGLFW);
+	glfwSetCharCallback((GLFWcharfun)TwEventCharGLFW);
 }
 
 void DeferedBase::loop()
 {
-    static int ok = 0;
-    static float delta = 0.0;
-    delta = 0.9 * delta + 0.1 * getFrameDeltaTime();
-    if (ok++%30 == 0)
-    {
-        cout << "fps = " << 1.0/delta << endl;
-    }
+	Input::update(getWindow());
 
+	//===== First Pass ====//
+	framebuffer.bindToWrite();
 
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glDepthMask(GL_TRUE);
+	glEnable(GL_DEPTH_TEST);
+	glDisable(GL_BLEND);
 
-    Input::update(getWindow());
+	firstPass();
 
-    //===== First Pass ====//
-    framebuffer.bindToWrite();
+	if (Input::isKeyHold(GLFW_KEY_SPACE))
+	{
+		//===== Draw the buffers of the first pass ==//
+		framebuffer.drawToScreen();
+	}
+	else
+	{
+		//===== Second Pass ====//
+		framebuffer.bindToRead();
 
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glDepthMask(GL_TRUE);
-    glEnable(GL_DEPTH_TEST);
-    glDisable(GL_BLEND);
+		secondPass();
 
-    firstPass();
-
-    if (Input::isKeyHold(GLFW_KEY_SPACE))
-    {
-        //===== Draw the buffers of the first pass ==//
-        framebuffer.drawToScreen();
-    }
-    else
-    {
-        //===== Second Pass ====//
-        framebuffer.bindToRead();
-
-        secondPass();
-
-    }
+	}
 	if(Input::isKeyHold(GLFW_KEY_ESCAPE))
 	{
 		exit();
 	}
+	TwDraw();
 }
 
 void DeferedBase::firstPass()
 {
-    cout << "first pass" << endl;
+	cout << "first pass" << endl;
 }
 
 void DeferedBase::secondPass()
 {
-    cout << "second pass" << endl;
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glDisable(GL_DEPTH_TEST);
-    glEnable(GL_BLEND);
-    glBlendEquation(GL_FUNC_ADD);
-    glBlendFunc(GL_ONE, GL_ONE);
-    screenObj.getShader().use();
-    screenObj.getShader().setUniform("positionMap",0);
-    screenObj.getShader().setUniform("colorMap",1);
-    screenObj.getShader().setUniform("normalMap",2);
-    screenObj.draw();
+	cout << "second pass" << endl;
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glDisable(GL_DEPTH_TEST);
+	glEnable(GL_BLEND);
+	glBlendEquation(GL_FUNC_ADD);
+	glBlendFunc(GL_ONE, GL_ONE);
+	screenObj.getShader().use();
+	screenObj.getShader().setUniform("positionMap",0);
+	screenObj.getShader().setUniform("colorMap",1);
+	screenObj.getShader().setUniform("normalMap",2);
+	screenObj.draw();
 }
