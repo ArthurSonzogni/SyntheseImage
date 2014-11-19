@@ -11,13 +11,13 @@ uniform vec3 lightPosition = vec3(0);
 uniform float lightRadius = 3.0;
 
 out vec2 fTexCoord;
-out vec3 fLightDirection;
+out vec3 fLightPosition;
 
 void main()
 {
     vec4 worldPos = view * model * vec4(position,1.0);
 
-    fLightDirection = (view * model * vec4(lightPosition,1.0) - worldPos).xyz;
+    fLightPosition = (view * model * vec4(lightPosition,1.0)).xyz;
 
     gl_Position = projection * worldPos;
 

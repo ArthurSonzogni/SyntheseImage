@@ -15,9 +15,9 @@ class ModelObj
         ~ModelObj();
         void draw();
         ShaderProgram& getShader();
+        bool hasTexture;
     private:
         Obj obj;
-        bool hasTexture;
         GLuint vao;
         ShaderProgram& shader;
         Texture& texture;

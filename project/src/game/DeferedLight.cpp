@@ -57,6 +57,7 @@ void DeferedLight::secondPass()
     sphere.getShader().setUniform("positionMap",0);
     sphere.getShader().setUniform("colorMap",1);
     sphere.getShader().setUniform("normalMap",2);
+    sphere.hasTexture = false;
 
 
     for(int i = 0; i<lights.size(); ++i)
