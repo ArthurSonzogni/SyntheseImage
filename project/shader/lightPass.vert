@@ -9,6 +9,7 @@ uniform mat4 model = mat4(1);
 uniform mat4 view = mat4(1);
 uniform vec3 lightPosition = vec3(0);
 uniform float lightRadius = 3.0;
+uniform vec4 lightColor = vec4(1.0);
 
 out vec2 fTexCoord;
 out vec3 fLightPosition;

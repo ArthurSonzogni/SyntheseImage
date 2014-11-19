@@ -21,7 +21,7 @@ void main()
     specularCoef = specularCoef*specularCoef;
     specularCoef = specularCoef*specularCoef;
     specularCoef = specularCoef*specularCoef;
-    float light = specularCoef*0.0 + diffuseCoef*0.8;
+    float light = specularCoef*2.0 + diffuseCoef*0.8;
 
     if (diffuseCoef>0.f) light += 0.5;
 

@@ -40,8 +40,9 @@ void DeferedLight::animateLight()
         lights[i].position = glm::vec3(3.f*i*cos(-i*t),1.f,3.f*i*sin(-i*t));
     }
 
+    static int i = 1;
     lights[0].position = glm::vec3(1.0,5.0,3.0);
-    lights[0].radius = 5.f;
+    lights[0].radius = 20.f;
 
 }
 
@@ -54,6 +55,10 @@ void DeferedLight::secondPass()
     glEnable(GL_BLEND);
     glBlendEquation(GL_FUNC_ADD);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+
+    // culling
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_FRONT);
 
     sphere.getShader().use();
     sphere.getShader().setUniform("projection",projection);
@@ -73,4 +78,8 @@ void DeferedLight::secondPass()
         sphere.getShader().setUniform("lightPosition",glm::vec3(0.0));
         sphere.draw();
     }
+
+    // culling
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
 }
