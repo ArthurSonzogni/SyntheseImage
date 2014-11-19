@@ -12,6 +12,7 @@ class ModelObj
 {
     public:
         ModelObj(const char * filename, ShaderProgram& shader);
+        ModelObj(const char * filename, ShaderProgram& shader, const char * textureName);
         ~ModelObj();
         void draw();
         ShaderProgram& getShader();

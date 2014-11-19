@@ -11,7 +11,31 @@
 
 using namespace std;
 
+ModelObj::ModelObj(const char * filename, ShaderProgram& _shader, const char * textureName):
+    obj(filename),
+    hasTexture(true),
+    shader(_shader),
+    texture(Texture::loadFromFile(
+        textureName
+    ))
+{
+    shader.use();
+    // vao allocation
+    glGenVertexArrays(1,&vao);
 
+    glCheckError(__FILE__,__LINE__);
+
+    // vao filling
+    glBindVertexArray(vao);
+    glBindBuffer(GL_ARRAY_BUFFER,obj.getVBO());
+    shader.setAttribute("position", 3, GL_FALSE, 8, 0);
+    shader.setAttribute("normal"  , 3, GL_FALSE, 8, 3);
+    shader.setAttribute("texCoord", 2, GL_FALSE, 8, 6);
+    glBindBuffer(GL_ARRAY_BUFFER,0);
+    glBindVertexArray(0);
+
+    glCheckError(__FILE__,__LINE__);
+}
 
 ModelObj::ModelObj(const char * filename, ShaderProgram& _shader):
     obj(filename),
@@ -30,17 +54,13 @@ ModelObj::ModelObj(const char * filename, ShaderProgram& _shader):
     // vao filling
     glBindVertexArray(vao);
     glBindBuffer(GL_ARRAY_BUFFER,obj.getVBO());
-    cout<< "ici" << endl;
     shader.setAttribute("position", 3, GL_FALSE, 8, 0);
     shader.setAttribute("normal"  , 3, GL_FALSE, 8, 3);
-    shader.setAttribute("texCoord"   , 2, GL_FALSE, 8, 6);
-    cout<< "cic" << endl;
+    shader.setAttribute("texCoord", 2, GL_FALSE, 8, 6);
     glBindBuffer(GL_ARRAY_BUFFER,0);
     glBindVertexArray(0);
 
     glCheckError(__FILE__,__LINE__);
-
-    hasTexture = true;
 }
 
 ModelObj::~ModelObj()

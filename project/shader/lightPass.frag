@@ -23,11 +23,18 @@ void main()
     specularCoef = specularCoef*specularCoef;
     specularCoef = specularCoef*specularCoef;
     specularCoef = specularCoef*specularCoef;
-    float light = specularCoef*2.0 + diffuseCoef*0.8;
+    float light = specularCoef*1.0 + diffuseCoef*0.8;
 
+
+    float dist = (lightRadius - length(fLightDirection))/lightRadius;
 
     /*gl_FragColor = vec4(position,1.0);*/
-    light *= (lightRadius - length(fLightDirection))/lightRadius;
+    light *= dist;
 
-    gl_FragColor = color * lightColor * light;
+    float d = length(fLightDirection.xy);
+
+    if (d<0.05)
+        gl_FragColor = lightColor;
+    else
+        gl_FragColor = color * lightColor * light;
 } 

@@ -14,6 +14,10 @@ DeferedLight::DeferedLight():
     sphere("obj/sphere.obj",ShaderProgram::loadFromFile(
         "shader/lightPass.vert",
         "shader/lightPass.frag"
+    )),
+    ambientObj("obj/screen.obj",ShaderProgram::loadFromFile(
+        "shader/ambientPass.vert",
+        "shader/ambientPass.frag"
     ))
 {
     glCheckError(__FILE__,__LINE__);
@@ -42,7 +46,9 @@ void DeferedLight::populateLight()
 
 void DeferedLight::animateLight()
 {
-    float t = getTime()*0.1;
+    static float t = 0.0;
+    t += getFrameDeltaTime() * 0.1;
+    //cout << t << endl;
     for(int i = 0; i<lights.size(); ++i)
     {
         float ii = i%10;
@@ -51,8 +57,8 @@ void DeferedLight::animateLight()
 
     static int i = 1;
     lights[0].position = glm::vec3(1.0,5.0,3.0);
-    lights[0].radius = 20.f;
-
+    lights[0].radius = 10.f;
+    lights[0].color = glm::vec4(1.0);
 }
 
 void DeferedLight::secondPass()
@@ -65,6 +71,21 @@ void DeferedLight::secondPass()
     glBlendEquation(GL_FUNC_ADD);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 
+    /////////////
+    // ambient//
+    ///////////
+    
+    ambientObj.getShader().use();
+    ambientObj.getShader().setUniform("positionMap",0);
+    ambientObj.getShader().setUniform("colorMap",1);
+    ambientObj.getShader().setUniform("normalMap",2);
+    ambientObj.getShader().setUniform("ambientColor",glm::vec4(1.0)*0.6f);
+    ambientObj.draw();
+
+    ///////////
+    // local//
+    /////////
+
     // culling
     glEnable(GL_CULL_FACE);
     glCullFace(GL_FRONT);
@@ -76,7 +97,6 @@ void DeferedLight::secondPass()
     sphere.getShader().setUniform("positionMap",0);
     sphere.getShader().setUniform("colorMap",1);
     sphere.getShader().setUniform("normalMap",2);
-    sphere.hasTexture = false;
 
 
     for(int i = 0; i<lights.size(); ++i)
