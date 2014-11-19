@@ -23,21 +23,30 @@ DeferedLight::DeferedLight():
 
 void DeferedLight::populateLight()
 {
-    for(int i = 0; i < 10; ++i)
+    for(int i = 0; i < 20; ++i)
     {
         Light l;
         l.position = glm::vec3(i,0,i);
-        l.radius = 3.f;
+        l.radius = 10.f;
+        float r,g,b;
+        r = (i%7)/7.0;
+        g = (i%4)/4.0;
+        b = (i%3)/3.0;
+        r = r*0.5 + 0.5;
+        g = g*0.5 + 0.5;
+        b = b*0.5 + 0.5;
+        l.color = glm::vec4(r,g,b,1.0);
         lights.push_back(l);
     }
 }
 
 void DeferedLight::animateLight()
 {
-    float t = getTime();
+    float t = getTime()*0.1;
     for(int i = 0; i<lights.size(); ++i)
     {
-        lights[i].position = glm::vec3(3.f*i*cos(-i*t),1.f,3.f*i*sin(-i*t));
+        float ii = i%10;
+        lights[i].position = glm::vec3(2.f*ii*cos(-i*t),1.f,2.f*ii*sin(-i*t));
     }
 
     static int i = 1;
@@ -76,6 +85,7 @@ void DeferedLight::secondPass()
         sphere.getShader().setUniform("lightRadius",lights[i].radius);
         sphere.getShader().setUniform("view",glm::scale(glm::translate(view,lights[i].position),glm::vec3(lights[i].radius)));
         sphere.getShader().setUniform("lightPosition",glm::vec3(0.0));
+        sphere.getShader().setUniform("lightColor",lights[i].color);
         sphere.draw();
     }
 

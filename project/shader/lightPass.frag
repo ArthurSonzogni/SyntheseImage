@@ -4,9 +4,11 @@ uniform sampler2D positionMap;
 uniform sampler2D colorMap;
 uniform sampler2D normalMap;
 
+uniform vec4 lightColor = vec4(1.0);
+uniform float lightRadius = 3.0;
+
 in vec2 fTexCoord;
 in vec3 fLightPosition;
-in float fRadius;
 
 void main()
 {
@@ -23,10 +25,9 @@ void main()
     specularCoef = specularCoef*specularCoef;
     float light = specularCoef*2.0 + diffuseCoef*0.8;
 
-    if (diffuseCoef>0.f) light += 0.5;
 
     /*gl_FragColor = vec4(position,1.0);*/
-    light *= (fRadius - length(fLightDirection))/fRadius;
+    light *= (lightRadius - length(fLightDirection))/lightRadius;
 
-    gl_FragColor = color * light;
+    gl_FragColor = color * lightColor * light;
 } 

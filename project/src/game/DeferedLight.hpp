@@ -14,6 +14,7 @@ class DeferedLight : public DeferedFirstPass
         struct Light
         {
             glm::vec3 position;
+            glm::vec4 color;
             float radius;
         };
     protected:
