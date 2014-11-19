@@ -17,12 +17,15 @@ class DeferedLight : public DeferedFirstPass
             glm::vec4 color;
             float radius;
         };
+
+        
     protected:
         std::vector<Light> lights;
         void populateLight();
         void animateLight();
         virtual void secondPass();
         ModelObj sphere;
+        ModelObj ambientObj;
 };
 
 #endif /* end of include guard: DeferedLIGHT_DEF*/

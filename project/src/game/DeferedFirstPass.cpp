@@ -12,14 +12,20 @@ using namespace std;
 
 DeferedFirstPass::DeferedFirstPass():
     DeferedBase(),
+    //obj("obj/ArmadilloTex.obj",ShaderProgram::loadFromFile(
     obj("obj/Charmander.obj",ShaderProgram::loadFromFile(
         "shader/geometryPass.vert",
         "shader/geometryPass.frag"
-    )),
+    ),
+        //"texture/Charmander.tga"
+        "texture/brick.jpg"
+    ),
     ground("obj/ground.obj",ShaderProgram::loadFromFile(
         "shader/geometryPass.vert",
         "shader/geometryPass.frag"
-    )),
+    ),
+        "texture/texture.png"
+    ),
 	camera(NULL)
 {
 	camera = new Camera();
@@ -38,6 +44,10 @@ void DeferedFirstPass::firstPass()
     obj.getShader().setUniform("projection",projection);
     obj.getShader().setUniform("view",view);
 
-    obj.draw();
+    //obj.getShader().setUniform("model",glm::mat4(1.0));
     ground.draw();
+
+    obj.getShader().use();
+    //obj.getShader().setUniform("model",glm::scale(glm::mat4(1.0),glm::vec3(0.04)));
+    obj.draw();
 }
