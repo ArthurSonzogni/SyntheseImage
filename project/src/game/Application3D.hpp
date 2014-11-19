@@ -3,7 +3,6 @@
 #include "system/Application.hpp"
 #include "graphic/FrameBuffer.hpp"
 #include "graphic/ModelObj.hpp"
-#include "game/ShaderLib.hpp"
 
 class ShaderProgram;
 
@@ -14,7 +13,6 @@ class Application3D : public Application
 
     protected:
         void loop();
-        ShaderLib shaderLib;
         FrameBuffer framebuffer;
         ModelObj obj;
         ModelObj screenObj;

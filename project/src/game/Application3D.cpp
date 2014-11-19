@@ -5,9 +5,9 @@
 #include "utils/glError.hpp"
 #include "utils/Texture.hpp"
 #include "system/Input.hpp"
+#include "graphic/Shader.hpp"
 
 using namespace std;
-
 
 
 Application3D::Application3D():
@@ -29,7 +29,7 @@ void Application3D::loop()
 {
     Input::update(getWindow());
 
-    //=================================
+    //===== First Pass ====//
     framebuffer.bindToWrite();
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -49,81 +49,27 @@ void Application3D::loop()
 
     obj.draw();
 
-    //=================================
-    if (Input::isKeyHold(GLFW_KEY_SPACE)) {
+    if (Input::isKeyHold(GLFW_KEY_SPACE))
+    {
+        //===== Draw the buffers of the first pass ==//
         framebuffer.drawToScreen();
-    } else {
+    }
+    else
+    {
+        //===== First Pass ====//
         screenObj.getShader().use();
         framebuffer.bindToRead();
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glDisable(GL_DEPTH_TEST);
+        glEnable(GL_BLEND);
+        glBlendEquation(GL_FUNC_ADD);
+        glBlendFunc(GL_ONE, GL_ONE);
+
         screenObj.getShader().setUniform("positionMap",0);
         screenObj.getShader().setUniform("colorMap",1);
         screenObj.getShader().setUniform("normalMap",2);
-        static float blur = 1.0;
-        if (Input::isKeyHold(GLFW_KEY_A)) blur *= 1.01;
-        if (Input::isKeyHold(GLFW_KEY_B)) blur *= 0.99;
-
-        //screenObj.getShader().setUniform("blur",blur);
-
-        //glDepthMask(GL_FALSE);
-        //glDisable(GL_DEPTH_TEST);
-        //glEnable(GL_BLEND);
-        //glBlendEquation(GL_FUNC_ADD);
-        //glBlendFunc(GL_ONE, GL_ONE);
-        
         screenObj.draw();
+
+
     }
 }
-//void Application3D::loop()
-//{
-    //Input::update(getWindow());
-
-    ////=================================
-    ////framebuffer.bindToWrite();
-
-    //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    //glDepthMask(GL_TRUE);
-    //glEnable(GL_DEPTH_TEST);
-    //glDisable(GL_BLEND);
-
-    //static float t=0;
-    //t+=getFrameDeltaTime();
-    //obj.getShader().use();
-    //glm::mat4 projection = glm::perspective(70.0f, 640.f/460.f, 0.1f, 100.f);
-    //glm::mat4 view  = glm::lookAt(
-        //glm::vec3(6.0*sin(t),6.0,6.0*cos(t)),
-        //glm::vec3(0.0,3.0,0.0),
-        //glm::vec3(0.0,1.0,0.0)
-    //);
-
-    //obj.getShader().setUniform("projection", projection);
-    //obj.getShader().setUniform("view", view);
-
-    //obj.draw();
-
-    ////=================================
-    //if (Input::isKeyHold(GLFW_KEY_SPACE)) {
-        //framebuffer.drawToScreen();
-    //} else {
-        //screenObj.getShader().use();
-        //framebuffer.bindToRead();
-        //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        //screenObj.getShader().setUniform("positionMap",0);
-        //screenObj.getShader().setUniform("colorMap",1);
-        //screenObj.getShader().setUniform("normalMap",2);
-        //static float blur = 1.0;
-        //if (Input::isKeyHold(GLFW_KEY_A)) blur *= 1.01;
-        //if (Input::isKeyHold(GLFW_KEY_B)) blur *= 0.99;
-
-        ////screenObj.getShader().setUniform("projection", projection);
-        ////screenObj.getShader().setUniform("blur",blur);
-
-        ////glDepthMask(GL_FALSE);
-        ////glDisable(GL_DEPTH_TEST);
-        ////glEnable(GL_BLEND);
-        ////glBlendEquation(GL_FUNC_ADD);
-        ////glBlendFunc(GL_ONE, GL_ONE);
-        
-        //screenObj.draw();
-    //}
-//}
