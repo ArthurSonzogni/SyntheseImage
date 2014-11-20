@@ -85,7 +85,7 @@ void DeferedLight::secondPass()
     ///////////
     // local//
     /////////
-
+    
     // culling
     glEnable(GL_CULL_FACE);
     glCullFace(GL_FRONT);
