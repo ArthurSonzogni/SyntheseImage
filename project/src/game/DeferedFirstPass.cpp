@@ -17,8 +17,8 @@ DeferedFirstPass::DeferedFirstPass():
         "shader/geometryPass.vert",
         "shader/geometryPass.frag"
     ),
-        //"texture/Charmander.tga"
-        "texture/brick.jpg"
+        "texture/Charmander.tga"
+        //"texture/brick.jpg"
     ),
     ground("obj/ground.obj",ShaderProgram::loadFromFile(
         "shader/geometryPass.vert",

@@ -27,19 +27,12 @@ DeferedLight::DeferedLight():
 
 void DeferedLight::populateLight()
 {
-    for(int i = 0; i < 20; ++i)
+    for(int i = 0; i < 6; ++i)
     {
         Light l;
         l.position = glm::vec3(i,0,i);
         l.radius = 10.f;
-        float r,g,b;
-        r = (i%7)/7.0;
-        g = (i%4)/4.0;
-        b = (i%3)/3.0;
-        r = r*0.5 + 0.5;
-        g = g*0.5 + 0.5;
-        b = b*0.5 + 0.5;
-        l.color = glm::vec4(r,g,b,1.0);
+        l.color = glm::vec4(glm::rgbColor(glm::vec3(360.f*(i-2)/6,10.0f,10.0f)),1.0);
         lights.push_back(l);
     }
 }
@@ -47,12 +40,14 @@ void DeferedLight::populateLight()
 void DeferedLight::animateLight()
 {
     static float t = 0.0;
-    t += getFrameDeltaTime() * 0.1;
+    t += getFrameDeltaTime() * 0.5;
     //cout << t << endl;
     for(int i = 0; i<lights.size(); ++i)
     {
-        float ii = i%10;
-        lights[i].position = glm::vec3(2.f*ii*cos(-i*t),1.f,2.f*ii*sin(-i*t));
+        float ii = 2+i%10;
+        lights[i].position.x = 6*sin(i*t);
+        lights[i].position.y = lights[i].radius * 0.3;
+        lights[i].position.z = 6*cos(i*t);
     }
 
     static int i = 1;
@@ -75,11 +70,28 @@ void DeferedLight::secondPass()
     // ambient//
     ///////////
     
+    static float param0 = 0.1;
+    if (Input::isKeyHold(GLFW_KEY_T))
+        param0 *= 1.01;
+    if (Input::isKeyHold(GLFW_KEY_G))
+        param0 /= 1.01;
+    cout << "param0 = " << param0 << endl;
+
+    static float param1 = 0.6;
+    if (Input::isKeyHold(GLFW_KEY_Y))
+        param1 *= 1.01;
+    if (Input::isKeyHold(GLFW_KEY_H))
+        param1 /= 1.01;
+    cout << "param1 = " << param1 << endl;
+    
     ambientObj.getShader().use();
     ambientObj.getShader().setUniform("positionMap",0);
     ambientObj.getShader().setUniform("colorMap",1);
     ambientObj.getShader().setUniform("normalMap",2);
     ambientObj.getShader().setUniform("ambientColor",glm::vec4(1.0)*0.6f);
+    ambientObj.getShader().setUniform("projection",projection);
+    ambientObj.getShader().setUniform("param0",param0);
+    ambientObj.getShader().setUniform("param1",param1);
     ambientObj.draw();
 
     ///////////
