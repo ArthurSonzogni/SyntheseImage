@@ -26,6 +26,7 @@ class DeferedLight : public DeferedFirstPass
         virtual void secondPass();
         ModelObj sphere;
         ModelObj ambientObj;
+        ModelObj occlusionObj;
 };
 
 #endif /* end of include guard: DeferedLIGHT_DEF*/

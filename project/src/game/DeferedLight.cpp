@@ -18,6 +18,10 @@ DeferedLight::DeferedLight():
     ambientObj("obj/screen.obj",ShaderProgram::loadFromFile(
         "shader/ambientPass.vert",
         "shader/ambientPass.frag"
+    )),
+    occlusionObj("obj/screen.obj",ShaderProgram::loadFromFile(
+        "shader/ambientOcclusion.vert",
+        "shader/ambientOcclusion.frag"
     ))
 {
     glCheckError(__FILE__,__LINE__);
@@ -70,28 +74,11 @@ void DeferedLight::secondPass()
     // ambient//
     ///////////
     
-    static float param0 = 0.1;
-    if (Input::isKeyHold(GLFW_KEY_T))
-        param0 *= 1.01;
-    if (Input::isKeyHold(GLFW_KEY_G))
-        param0 /= 1.01;
-    cout << "param0 = " << param0 << endl;
-
-    static float param1 = 0.6;
-    if (Input::isKeyHold(GLFW_KEY_Y))
-        param1 *= 1.01;
-    if (Input::isKeyHold(GLFW_KEY_H))
-        param1 /= 1.01;
-    cout << "param1 = " << param1 << endl;
-    
     ambientObj.getShader().use();
     ambientObj.getShader().setUniform("positionMap",0);
     ambientObj.getShader().setUniform("colorMap",1);
     ambientObj.getShader().setUniform("normalMap",2);
     ambientObj.getShader().setUniform("ambientColor",glm::vec4(1.0)*0.6f);
-    ambientObj.getShader().setUniform("projection",projection);
-    ambientObj.getShader().setUniform("param0",param0);
-    ambientObj.getShader().setUniform("param1",param1);
     ambientObj.draw();
 
     ///////////
@@ -124,4 +111,37 @@ void DeferedLight::secondPass()
     // culling
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
+
+    ////////////////
+    // occlusion //
+    //////////////
+    
+    if (Input::isKeyHold(GLFW_KEY_O)) return;
+
+    glEnable(GL_BLEND);
+    glBlendEquation(GL_FUNC_REVERSE_SUBTRACT);
+    glBlendFunc(GL_ONE,GL_ONE);
+    
+    static float param0 = 0.1;
+    if (Input::isKeyHold(GLFW_KEY_T))
+        param0 *= 1.01;
+    if (Input::isKeyHold(GLFW_KEY_G))
+        param0 /= 1.01;
+    cout << "param0 = " << param0 << endl;
+
+    static float param1 = 0.6;
+    if (Input::isKeyHold(GLFW_KEY_Y))
+        param1 *= 1.01;
+    if (Input::isKeyHold(GLFW_KEY_H))
+        param1 /= 1.01;
+    cout << "param1 = " << param1 << endl;
+    
+    occlusionObj.getShader().use();
+    occlusionObj.getShader().setUniform("positionMap",0);
+    occlusionObj.getShader().setUniform("colorMap",1);
+    occlusionObj.getShader().setUniform("normalMap",2);
+    occlusionObj.getShader().setUniform("projection",projection);
+    occlusionObj.getShader().setUniform("param0",param0);
+    occlusionObj.getShader().setUniform("param1",param1);
+    occlusionObj.draw();
 }
