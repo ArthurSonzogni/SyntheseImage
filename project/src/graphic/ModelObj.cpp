@@ -96,3 +96,8 @@ ShaderProgram& ModelObj::getShader()
 {
     return shader;
 }
+
+Obj::Dimension ModelObj::getDimension()
+{
+    return obj.getDimension();
+}

@@ -17,6 +17,7 @@ class ModelObj
         void draw();
         ShaderProgram& getShader();
         bool hasTexture;
+        Obj::Dimension getDimension();
     private:
         Obj obj;
         GLuint vao;

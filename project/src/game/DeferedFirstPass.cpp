@@ -13,13 +13,9 @@ using namespace std;
 DeferedFirstPass::DeferedFirstPass():
     DeferedBase(),
     //obj("obj/ArmadilloTex.obj",ShaderProgram::loadFromFile(
-    obj("obj/Charmander.obj",ShaderProgram::loadFromFile(
-        "shader/geometryPass.vert",
-        "shader/geometryPass.frag"
-    ),
-        "texture/Charmander.tga"
-        //"texture/brick.jpg"
-    ),
+    //obj("obj/Charmander.obj",ShaderProgram::loadFromFile(
+    objIndex(0),
+    obj(NULL),
     ground("obj/ground.obj",ShaderProgram::loadFromFile(
         "shader/geometryPass.vert",
         "shader/geometryPass.frag"
@@ -39,15 +35,51 @@ void DeferedFirstPass::firstPass()
 	camera->update();
 	view = camera->lookAt();
 
-    projection = glm::perspective(70.0f, 640.0f/480.0f, 0.1f, 100.0f);
-    obj.getShader().use();
-    obj.getShader().setUniform("projection",projection);
-    obj.getShader().setUniform("view",view);
+    projection = glm::perspective(70.0f, float(getWidth())/float(getHeight()), 0.1f, 100.0f);
+    ground.getShader().use();
+    ground.getShader().setUniform("projection",projection);
+    ground.getShader().setUniform("view",view);
+    ground.getShader().setUniform("model",glm::mat4(1.f));
 
     //obj.getShader().setUniform("model",glm::mat4(1.0));
     ground.draw();
 
-    obj.getShader().use();
-    //obj.getShader().setUniform("model",glm::scale(glm::mat4(1.0),glm::vec3(0.04)));
-    obj.draw();
+    ////////////
+    //  Obj ///
+    //////////
+
+    if (!obj || Input::isKeyPressed(GLFW_KEY_M))
+    {
+        const char* objName[]=
+        {
+            "obj/Charmander.obj",
+            "obj/ArmadilloTex.obj",
+            "obj/mew.obj",
+        };
+        const char* textureName[]=
+        {
+            "texture/Charmander.tga",
+            "texture/pavement.jpg",
+            "texture/mew.tga",
+        };
+        objIndex = (objIndex+1)%3;
+        if (obj) delete obj;
+        obj = new ModelObj(objName[objIndex],ground.getShader(),textureName[objIndex]);
+    }
+
+    obj -> getShader().use();
+    glm::mat4 objTransform(1.0);
+    float size = 4.0;
+    {
+        auto d = obj -> getDimension();
+        float dx = d.xmax-d.xmin;
+        float dy = d.ymax-d.ymin;
+        float dz = d.zmax-d.zmin;
+        float dg = size/sqrt(sqrt(dx*dy)*dz);
+        objTransform = glm::translate(objTransform,glm::vec3(0.0,+dy/2.f*dg,0.0));
+        objTransform = glm::scale(objTransform,glm::vec3(dg,dg,dg));
+        objTransform = glm::translate(objTransform,glm::vec3(-d.xmin-dx/2,-d.ymin-dy/2,-d.zmin-dz/2));
+    }
+    obj -> getShader().setUniform("model",objTransform);
+    obj -> draw();
 }

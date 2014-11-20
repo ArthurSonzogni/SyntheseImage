@@ -129,6 +129,24 @@ Obj::Obj(const char * filename)
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     glCheckError(__FILE__,__LINE__);
+
+
+    // computing dimension;
+    dimension.xmin = vertexArray[0];
+    dimension.ymin = vertexArray[1];
+    dimension.zmin = vertexArray[2];
+    dimension.xmax = vertexArray[0];
+    dimension.ymax = vertexArray[1];
+    dimension.zmax = vertexArray[2];
+	for(unsigned int i=0;i<vertexArray.size();i+=8)
+    {
+        dimension.xmin = min(dimension.xmin,vertexArray[0+i]);
+        dimension.ymin = min(dimension.ymin,vertexArray[1+i]);
+        dimension.zmin = min(dimension.zmin,vertexArray[2+i]);
+        dimension.xmax = max(dimension.xmax,vertexArray[0+i]);
+        dimension.ymax = max(dimension.ymax,vertexArray[1+i]);
+        dimension.zmax = max(dimension.zmax,vertexArray[2+i]);
+    }
 }
 
 Obj::~Obj()
@@ -144,4 +162,9 @@ GLuint Obj::getVBO() const
 unsigned int Obj::getNbFace() const
 {
     return faceNb;
+}
+
+Obj::Dimension Obj::getDimension()
+{
+    return dimension;
 }

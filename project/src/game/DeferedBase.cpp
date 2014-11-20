@@ -33,6 +33,7 @@ void DeferedBase::loop()
 
 
     Input::update(getWindow());
+    framebuffer.recreate(getWidth(),getHeight());
 
     //===== First Pass ====//
     framebuffer.bindToWrite();

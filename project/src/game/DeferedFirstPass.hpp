@@ -13,7 +13,8 @@ class DeferedFirstPass : public DeferedBase
         DeferedFirstPass();
 
     protected:
-        ModelObj obj;
+        int objIndex;
+        ModelObj* obj;
         ModelObj ground;
         GLuint texture;
         void firstPass();

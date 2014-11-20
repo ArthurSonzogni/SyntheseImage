@@ -127,14 +127,14 @@ void DeferedLight::secondPass()
         param0 *= 1.01;
     if (Input::isKeyHold(GLFW_KEY_G))
         param0 /= 1.01;
-    cout << "param0 = " << param0 << endl;
+    //cout << "param0 = " << param0 << endl;
 
     static float param1 = 0.6;
     if (Input::isKeyHold(GLFW_KEY_Y))
         param1 *= 1.01;
     if (Input::isKeyHold(GLFW_KEY_H))
         param1 /= 1.01;
-    cout << "param1 = " << param1 << endl;
+    //cout << "param1 = " << param1 << endl;
     
     occlusionObj.getShader().use();
     occlusionObj.getShader().setUniform("positionMap",0);
