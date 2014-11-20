@@ -5,6 +5,7 @@
 #include "utils/glm.hpp"
 #include "game/Camera.hpp"
 #include <AntTweakBar.h>
+#include <SFML/System.hpp>
 
 class ShaderProgram;
 
@@ -17,7 +18,8 @@ class DeferedFirstPass : public DeferedBase
     protected:
 		void initTwBar();
 
-        ModelObj *obj;
+        int objIndex;
+        ModelObj* obj;
         ModelObj ground;
         GLuint texture;
         void firstPass();
@@ -29,6 +31,8 @@ class DeferedFirstPass : public DeferedBase
 		Camera *camera;
 
 		TwBar *menuBar;
+
+		sf::Mutex loadingMutex;
 };
 
 

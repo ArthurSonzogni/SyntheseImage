@@ -13,9 +13,20 @@ class Obj
         ~Obj();
         GLuint getVBO() const;
         unsigned int getNbFace() const;
+
+        struct Dimension
+        {
+            float xmin,ymin,zmin;
+            float xmax,ymax,zmax;
+        };
+        
+        Dimension getDimension();
+
     private:
         GLuint vbo;
         unsigned int faceNb;
+        Dimension dimension;
+        
 };
 
 #endif /* end of include guard: OBJ_YFJJB6N0 */

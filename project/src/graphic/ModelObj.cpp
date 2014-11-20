@@ -125,3 +125,8 @@ Texture& ModelObj::getTexture()
 {
 	return texture;
 }
+
+Obj::Dimension ModelObj::getDimension()
+{
+    return obj.getDimension();
+}

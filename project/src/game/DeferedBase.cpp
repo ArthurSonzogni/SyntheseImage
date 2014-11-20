@@ -21,7 +21,18 @@ DeferedBase::DeferedBase():
 
 void DeferedBase::loop()
 {
-	Input::update(getWindow());
+//    static int ok = 0;
+//    static float delta = 0.0;
+//    delta = 0.9 * delta + 0.1 * getFrameDeltaTime();
+//    if (ok++%30 == 0)
+//    {
+//        cout << "fps = " << 1.0/delta << endl;
+//    }
+
+
+
+    Input::update(getWindow());
+    framebuffer.recreate(getWidth(),getHeight());
 
 	//===== First Pass ====//
 	framebuffer.bindToWrite();
