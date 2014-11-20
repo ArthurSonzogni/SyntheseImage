@@ -63,6 +63,30 @@ ModelObj::ModelObj(const char * filename, ShaderProgram& _shader):
     glCheckError(__FILE__,__LINE__);
 }
 
+ModelObj::ModelObj(const char * filename, ShaderProgram& _shader, Texture& _texture):
+    obj(filename),
+    hasTexture(true),
+    shader(_shader),
+    texture(_texture)
+{
+    shader.use();
+    // vao allocation
+    glGenVertexArrays(1,&vao);
+
+    glCheckError(__FILE__,__LINE__);
+
+    // vao filling
+    glBindVertexArray(vao);
+    glBindBuffer(GL_ARRAY_BUFFER,obj.getVBO());
+    shader.setAttribute("position", 3, GL_FALSE, 8, 0);
+    shader.setAttribute("normal"  , 3, GL_FALSE, 8, 3);
+    shader.setAttribute("texCoord", 2, GL_FALSE, 8, 6);
+    glBindBuffer(GL_ARRAY_BUFFER,0);
+    glBindVertexArray(0);
+
+    glCheckError(__FILE__,__LINE__);
+}
+
 ModelObj::~ModelObj()
 {
     glDeleteVertexArrays(1,&vao);
@@ -95,4 +119,9 @@ void ModelObj::draw()
 ShaderProgram& ModelObj::getShader()
 {
     return shader;
+}
+
+Texture& ModelObj::getTexture()
+{
+	return texture;
 }

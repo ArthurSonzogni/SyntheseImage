@@ -14,19 +14,9 @@ DeferedBase::DeferedBase():
 	screenObj("obj/screen.obj",ShaderProgram::loadFromFile(
 				"shader/compose.vert",
 				"shader/compose.frag"
-				)),
-	menuBar(NULL)
+				))
 {
-	TwInit(TW_OPENGL_CORE, NULL);
-	TwWindowSize(getWidth(), getHeight());
-	menuBar = TwNewBar("Coucou");
 	glCheckError(__FILE__,__LINE__);
-
-	glfwSetMouseButtonCallback((GLFWmousebuttonfun)TwEventMouseButtonGLFW);
-	glfwSetMousePosCallback((GLFWmouseposfun)TwEventMousePosGLFW);
-	glfwSetMouseWheelCallback((GLFWmousewheelfun)TwEventMouseWheelGLFW);
-	glfwSetKeyCallback((GLFWkeyfun)TwEventKeyGLFW);
-	glfwSetCharCallback((GLFWcharfun)TwEventCharGLFW);
 }
 
 void DeferedBase::loop()
@@ -60,7 +50,6 @@ void DeferedBase::loop()
 	{
 		exit();
 	}
-	TwDraw();
 }
 
 void DeferedBase::firstPass()
