@@ -122,12 +122,12 @@ void DeferedLight::secondPass()
     glBlendEquation(GL_FUNC_REVERSE_SUBTRACT);
     glBlendFunc(GL_ONE,GL_ONE);
     
-    static float param0 = 0.1;
+    static float param0 = 1.0;
     if (Input::isKeyHold(GLFW_KEY_T))
         param0 *= 1.01;
     if (Input::isKeyHold(GLFW_KEY_G))
         param0 /= 1.01;
-    //cout << "param0 = " << param0 << endl;
+    cout << "param0 = " << param0 << endl;
 
     static float param1 = 0.6;
     if (Input::isKeyHold(GLFW_KEY_Y))

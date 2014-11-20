@@ -13,7 +13,7 @@ in vec2 fTexCoord;
 
 void main()
 {
-    float dist = param0;;
+    float dist = 0.1;
     vec3 position = texture(positionMap,fTexCoord).xyz;
     vec4 color = texture(colorMap,fTexCoord);
     vec3 normal = texture(normalMap,fTexCoord).xyz;
@@ -42,7 +42,7 @@ void main()
         vec2 texPos = pos.xy*0.5+vec2(0.5);
         float dif = texture(positionMap,texPos).z - newPos.z;
         dif *= 1.0f;
-        occlusion += 0.2*max(0.0,dif - dif*dif*dif*dif);
+        occlusion += 0.2f*max(0.0,dif - dif*dif*dif*dif);
     }
     occlusion = 2*occlusion - occlusion*occlusion;
     gl_FragColor = vec4(occlusion,occlusion,occlusion,0.0);
