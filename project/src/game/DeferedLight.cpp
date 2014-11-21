@@ -144,4 +144,8 @@ void DeferedLight::secondPass()
     occlusionObj.getShader().setUniform("param0",param0);
     occlusionObj.getShader().setUniform("param1",param1);
     occlusionObj.draw();
+
+    glDisable(GL_BLEND);
+    glBlendEquation(GL_FUNC_ADD);
+    glBlendFunc(GL_ONE,GL_ONE);
 }
