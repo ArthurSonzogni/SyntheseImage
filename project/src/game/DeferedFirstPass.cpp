@@ -109,7 +109,7 @@ void DeferedFirstPass::firstPass()
     //  Obj ///
     //////////
 
-	loadingMutex.lock();
+	//loadingMutex.lock();
     if (!obj || Input::isKeyPressed(GLFW_KEY_M))
     {
         const char* objName[]=
@@ -144,7 +144,7 @@ void DeferedFirstPass::firstPass()
     }
     obj->getShader().setUniform("model",objTransform);
     obj->draw();
-	loadingMutex.unlock();
+	//loadingMutex.unlock();
 }
 
 void DeferedFirstPass::initTwBar()
