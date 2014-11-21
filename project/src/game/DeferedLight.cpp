@@ -70,51 +70,96 @@ void DeferedLight::secondPass()
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glDisable(GL_DEPTH_TEST);
-    glEnable(GL_BLEND);
-    glBlendEquation(GL_FUNC_ADD);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 
     /////////////
     // ambient//
     ///////////
     
-    ambientObj.getShader().use();
-    ambientObj.getShader().setUniform("positionMap",0);
-    ambientObj.getShader().setUniform("colorMap",1);
-    ambientObj.getShader().setUniform("normalMap",2);
-    ambientObj.getShader().setUniform("ambientColor",glm::vec4(1.0)*0.6f);
-    ambientObj.draw();
+    if (Input::isKeyHold(GLFW_KEY_Q))
+    {
+        glEnable(GL_BLEND);
+        glBlendEquation(GL_FUNC_ADD);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+        ambientObj.getShader().use();
+        ambientObj.getShader().setUniform("positionMap",0);
+        ambientObj.getShader().setUniform("colorMap",1);
+        ambientObj.getShader().setUniform("normalMap",2);
+        ambientObj.getShader().setUniform("ambientColor",glm::vec4(1.0)*0.6f);
+        ambientObj.draw();
+    }
 
+    ////////////////
+    // reflection//
+    //////////////
+    
+    if (Input::isKeyHold(GLFW_KEY_R))
+    {
+        if (Input::isKeyHold(GLFW_KEY_O)) return;
+
+        glEnable(GL_BLEND);
+        glBlendEquation(GL_FUNC_ADD);
+        //glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+        glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+        //glBlendFunc(GL_ONE,GL_ONE);
+        
+        static float param0 = 1.0;
+        if (Input::isKeyHold(GLFW_KEY_T))
+            param0 *= 1.01;
+        if (Input::isKeyHold(GLFW_KEY_G))
+            param0 /= 1.01;
+        //cout << "param0 = " << param0 << endl;
+
+        static float param1 = 0.6;
+        if (Input::isKeyHold(GLFW_KEY_Y))
+            param1 *= 1.01;
+        if (Input::isKeyHold(GLFW_KEY_H))
+            param1 /= 1.01;
+        //cout << "param1 = " << param1 << endl;
+        
+        reflectionObj.getShader().use();
+        reflectionObj.getShader().setUniform("positionMap",0);
+        reflectionObj.getShader().setUniform("colorMap",1);
+        reflectionObj.getShader().setUniform("normalMap",2);
+        reflectionObj.getShader().setUniform("projection",projection);
+        reflectionObj.draw();
+    }
     ///////////
     // local//
     /////////
     
-    // culling
-    glEnable(GL_CULL_FACE);
-    glCullFace(GL_FRONT);
-
-    sphere.getShader().use();
-    sphere.getShader().setUniform("projection",projection);
-    sphere.getShader().setUniform("view",view);
-
-    sphere.getShader().setUniform("positionMap",0);
-    sphere.getShader().setUniform("colorMap",1);
-    sphere.getShader().setUniform("normalMap",2);
-
-
-    for(int i = 0; i<lights.size(); ++i)
+    if (!Input::isKeyHold(GLFW_KEY_L))
     {
-        sphere.getShader().use();
-        sphere.getShader().setUniform("lightRadius",lights[i].radius);
-        sphere.getShader().setUniform("view",glm::scale(glm::translate(view,lights[i].position),glm::vec3(lights[i].radius)));
-        sphere.getShader().setUniform("lightPosition",glm::vec3(0.0));
-        sphere.getShader().setUniform("lightColor",lights[i].color);
-        sphere.draw();
-    }
+        glEnable(GL_BLEND);
+        glBlendEquation(GL_FUNC_ADD);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 
-    // culling
-    glEnable(GL_CULL_FACE);
-    glCullFace(GL_BACK);
+        // culling
+        glEnable(GL_CULL_FACE);
+        glCullFace(GL_FRONT);
+
+        sphere.getShader().use();
+        sphere.getShader().setUniform("projection",projection);
+        sphere.getShader().setUniform("view",view);
+
+        sphere.getShader().setUniform("positionMap",0);
+        sphere.getShader().setUniform("colorMap",1);
+        sphere.getShader().setUniform("normalMap",2);
+
+
+        for(int i = 0; i<lights.size(); ++i)
+        {
+            sphere.getShader().use();
+            sphere.getShader().setUniform("lightRadius",lights[i].radius);
+            sphere.getShader().setUniform("view",glm::scale(glm::translate(view,lights[i].position),glm::vec3(lights[i].radius)));
+            sphere.getShader().setUniform("lightPosition",glm::vec3(0.0));
+            sphere.getShader().setUniform("lightColor",lights[i].color);
+            sphere.draw();
+        }
+
+        // culling
+        glEnable(GL_CULL_FACE);
+        glCullFace(GL_BACK);
+    }
 
     ////////////////
     // occlusion //
@@ -150,40 +195,6 @@ void DeferedLight::secondPass()
         occlusionObj.draw();
     }
 
-    ////////////////
-    // reflection//
-    //////////////
-    
-    if (Input::isKeyHold(GLFW_KEY_R))
-    {
-        if (Input::isKeyHold(GLFW_KEY_O)) return;
-
-        glEnable(GL_BLEND);
-        glBlendEquation(GL_FUNC_ADD);
-        glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
-        //glBlendFunc(GL_ONE,GL_ONE);
-        
-        static float param0 = 1.0;
-        if (Input::isKeyHold(GLFW_KEY_T))
-            param0 *= 1.01;
-        if (Input::isKeyHold(GLFW_KEY_G))
-            param0 /= 1.01;
-        //cout << "param0 = " << param0 << endl;
-
-        static float param1 = 0.6;
-        if (Input::isKeyHold(GLFW_KEY_Y))
-            param1 *= 1.01;
-        if (Input::isKeyHold(GLFW_KEY_H))
-            param1 /= 1.01;
-        //cout << "param1 = " << param1 << endl;
-        
-        reflectionObj.getShader().use();
-        reflectionObj.getShader().setUniform("positionMap",0);
-        reflectionObj.getShader().setUniform("colorMap",1);
-        reflectionObj.getShader().setUniform("normalMap",2);
-        reflectionObj.getShader().setUniform("projection",projection);
-        reflectionObj.draw();
-    }
 
     glDisable(GL_BLEND);
     glBlendEquation(GL_FUNC_ADD);
