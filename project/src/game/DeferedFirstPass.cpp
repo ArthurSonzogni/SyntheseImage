@@ -164,7 +164,6 @@ void DeferedFirstPass::initTwBar()
 
 void DeferedFirstPass::loadModel(const char *fileName)
 {
-	loadingMutex.lock();
 	std::string target = std::string("obj/")+std::string(fileName);
 	ModelObj *newObj = NULL;
 
@@ -176,12 +175,13 @@ void DeferedFirstPass::loadModel(const char *fileName)
 	{
 		newObj = new ModelObj(target.c_str(), obj->getShader());
 	}
+	//loadingMutex.lock();
 	if(newObj)
 	{
 		if(obj) delete obj;
 		obj = newObj;
 	}
-	loadingMutex.unlock();
+	//loadingMutex.unlock();
 }
 
 DeferedFirstPass::~DeferedFirstPass()
