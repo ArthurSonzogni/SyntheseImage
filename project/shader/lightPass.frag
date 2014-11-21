@@ -33,7 +33,7 @@ void main()
 
     float d = length(fLightDirection.xy);
 
-    if (d<0.05)
+    if (d<0.1)
         gl_FragColor = lightColor;
     else
         gl_FragColor = color * lightColor * light;
