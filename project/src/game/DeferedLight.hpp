@@ -27,6 +27,7 @@ class DeferedLight : public DeferedFirstPass
         ModelObj sphere;
         ModelObj ambientObj;
         ModelObj occlusionObj;
+        ModelObj reflectionObj;
 };
 
 #endif /* end of include guard: DeferedLIGHT_DEF*/

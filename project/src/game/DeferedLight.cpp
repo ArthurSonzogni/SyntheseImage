@@ -22,6 +22,10 @@ DeferedLight::DeferedLight():
     occlusionObj("obj/screen.obj",ShaderProgram::loadFromFile(
         "shader/ambientOcclusion.vert",
         "shader/ambientOcclusion.frag"
+    )),
+    reflectionObj("obj/screen.obj",ShaderProgram::loadFromFile(
+        "shader/ambientReflection.vert",
+        "shader/ambientReflection.frag"
     ))
 {
     glCheckError(__FILE__,__LINE__);
@@ -116,34 +120,70 @@ void DeferedLight::secondPass()
     // occlusion //
     //////////////
     
-    if (Input::isKeyHold(GLFW_KEY_O)) return;
+    if (!Input::isKeyHold(GLFW_KEY_O))
+    {
+        glEnable(GL_BLEND);
+        glBlendEquation(GL_FUNC_REVERSE_SUBTRACT);
+        glBlendFunc(GL_ONE,GL_ONE);
+        
+        static float param0 = 1.0;
+        if (Input::isKeyHold(GLFW_KEY_T))
+            param0 *= 1.01;
+        if (Input::isKeyHold(GLFW_KEY_G))
+            param0 /= 1.01;
+        //cout << "param0 = " << param0 << endl;
 
-    glEnable(GL_BLEND);
-    glBlendEquation(GL_FUNC_REVERSE_SUBTRACT);
-    glBlendFunc(GL_ONE,GL_ONE);
-    
-    static float param0 = 1.0;
-    if (Input::isKeyHold(GLFW_KEY_T))
-        param0 *= 1.01;
-    if (Input::isKeyHold(GLFW_KEY_G))
-        param0 /= 1.01;
-//    cout << "param0 = " << param0 << endl;
+        static float param1 = 0.6;
+        if (Input::isKeyHold(GLFW_KEY_Y))
+            param1 *= 1.01;
+        if (Input::isKeyHold(GLFW_KEY_H))
+            param1 /= 1.01;
+        //cout << "param1 = " << param1 << endl;
+        
+        occlusionObj.getShader().use();
+        occlusionObj.getShader().setUniform("positionMap",0);
+        occlusionObj.getShader().setUniform("colorMap",1);
+        occlusionObj.getShader().setUniform("normalMap",2);
+        occlusionObj.getShader().setUniform("projection",projection);
+        occlusionObj.getShader().setUniform("param0",param0);
+        occlusionObj.getShader().setUniform("param1",param1);
+        occlusionObj.draw();
+    }
 
-    static float param1 = 0.6;
-    if (Input::isKeyHold(GLFW_KEY_Y))
-        param1 *= 1.01;
-    if (Input::isKeyHold(GLFW_KEY_H))
-        param1 /= 1.01;
-    //cout << "param1 = " << param1 << endl;
+    ////////////////
+    // reflection//
+    //////////////
     
-    occlusionObj.getShader().use();
-    occlusionObj.getShader().setUniform("positionMap",0);
-    occlusionObj.getShader().setUniform("colorMap",1);
-    occlusionObj.getShader().setUniform("normalMap",2);
-    occlusionObj.getShader().setUniform("projection",projection);
-    occlusionObj.getShader().setUniform("param0",param0);
-    occlusionObj.getShader().setUniform("param1",param1);
-    occlusionObj.draw();
+    if (Input::isKeyHold(GLFW_KEY_R))
+    {
+        if (Input::isKeyHold(GLFW_KEY_O)) return;
+
+        glEnable(GL_BLEND);
+        glBlendEquation(GL_FUNC_ADD);
+        glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+        //glBlendFunc(GL_ONE,GL_ONE);
+        
+        static float param0 = 1.0;
+        if (Input::isKeyHold(GLFW_KEY_T))
+            param0 *= 1.01;
+        if (Input::isKeyHold(GLFW_KEY_G))
+            param0 /= 1.01;
+        //cout << "param0 = " << param0 << endl;
+
+        static float param1 = 0.6;
+        if (Input::isKeyHold(GLFW_KEY_Y))
+            param1 *= 1.01;
+        if (Input::isKeyHold(GLFW_KEY_H))
+            param1 /= 1.01;
+        //cout << "param1 = " << param1 << endl;
+        
+        reflectionObj.getShader().use();
+        reflectionObj.getShader().setUniform("positionMap",0);
+        reflectionObj.getShader().setUniform("colorMap",1);
+        reflectionObj.getShader().setUniform("normalMap",2);
+        reflectionObj.getShader().setUniform("projection",projection);
+        reflectionObj.draw();
+    }
 
     glDisable(GL_BLEND);
     glBlendEquation(GL_FUNC_ADD);
