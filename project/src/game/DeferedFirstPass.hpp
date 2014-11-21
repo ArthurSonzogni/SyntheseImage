@@ -13,6 +13,7 @@ class DeferedFirstPass : public DeferedBase
 {
     public:
         DeferedFirstPass();
+		~DeferedFirstPass();
 		void loadModel(const char *fileName);
 
     protected:

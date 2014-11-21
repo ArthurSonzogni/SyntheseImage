@@ -183,3 +183,8 @@ void DeferedFirstPass::loadModel(const char *fileName)
 	}
 	loadingMutex.unlock();
 }
+
+DeferedFirstPass::~DeferedFirstPass()
+{
+	TwTerminate();
+}
