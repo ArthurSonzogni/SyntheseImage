@@ -94,7 +94,6 @@ void DeferedLight::secondPass()
     
     if (Input::isKeyHold(GLFW_KEY_R))
     {
-        if (Input::isKeyHold(GLFW_KEY_O)) return;
 
         glEnable(GL_BLEND);
         glBlendEquation(GL_FUNC_ADD);
