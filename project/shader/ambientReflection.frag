@@ -12,9 +12,37 @@ uniform float param1;
 in vec2 fTexCoord;
 in vec3 screenPos;
 
-const int maxStep = 20;
-const float rayStepSize = 0.1/maxStep;
+const int maxStep = 100;
+const float rayStepSize = 5.0/maxStep;
 
+/*void main()*/
+/*{*/
+    /*gl_FragColor = vec4(0,0,0,0);*/
+
+    /*vec3 normal = normalize( texture(normalMap, fTexCoord) ).xyz;*/
+    /*vec3 initialPosition = texture(positionMap, fTexCoord).xyz;*/
+    /*vec3 r = reflect(vec3(0,0,-1),normal);*/
+
+    /*for(int i = 1; i<maxStep; ++i)*/
+    /*{*/
+        /*vec3 pos = initialPosition + r*i*rayStepSize;*/
+        /*vec4 ppos = projection * vec4(pos,0.0);*/
+        /*vec2 tpos = ppos.xy/ppos.w*0.5+0.5;*/
+        /*float pDepth = texture(positionMap,tpos).z;*/
+
+        /*float diff  = pos.z - pDepth;*/
+
+        /*const float epsilon = 0.5f;*/
+        /*[>if( diff >= 0.01f && diff < 0.1)<]*/
+        /*{*/
+            /*gl_FragColor.rgb += 10.0*texture(colorMap,tpos).rgb/maxStep/i;*/
+            /*gl_FragColor.a = 1.0;*/
+            /*[>gl_FragColor.a = 1.0-10.f*length(p.xy-initialPosition.xy);<]*/
+            /*[>return;<]*/
+        /*}*/
+    /*}*/
+
+/*}*/
 void main()
 {
     vec3 normal = normalize( texture(normalMap, fTexCoord) ).xyz;
@@ -26,7 +54,7 @@ void main()
 
     gl_FragColor = vec4(0,0,0,0);
 
-    float stepSize = rayStepSize; 
+    float stepSize = rayStepSize;
     vec3 reflectionVector = vec3(r.xyz) * rayStepSize;
     vec3 initialPosition = vec3(fTexCoord,currDepth);
     vec3 position = initialPosition;
@@ -47,30 +75,3 @@ void main()
     }
 
 }
-
-
-/*void main()*/
-/*{*/
-/*float dist = 0.1;*/
-/*vec3 position = texture(positionMap,fTexCoord).xyz;*/
-/*vec4 color = texture(colorMap,fTexCoord);*/
-/*vec3 normal = texture(normalMap,fTexCoord).xyz;*/
-/*vec3 reflection = reflect(vec3(0.0,0.0,1.0),normal);*/
-
-/*for(int i = 0; i < 10.0; ++i)*/
-/*{*/
-/*vec3 newPos = position + reflection*i*10.0;*/
-/*vec4 pos = projection * vec4(newPos,1.0);*/
-/*pos.xy/=pos.w;*/
-/*vec2 texPos = pos.xy*0.5+vec2(0.5);*/
-/*vec3 realPos = texture(positionMap,texPos).xyz;*/
-/*const float bias = 3.0;*/
-/*if (realPos.z + bias > newPos.z && newPos.z + bias>realPos.z)*/
-/*{*/
-/*vec3 c = texture(colorMap,texPos).xyz;*/
-/*gl_FragColor = vec4(c*0.8,1.0);*/
-/*return;*/
-/*}*/
-/*}*/
-/*gl_FragColor = vec4(0.0);*/
-/*} */
