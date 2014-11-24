@@ -41,7 +41,7 @@ void DeferedLight::populateLight()
     {
         Light l;
         l.position = glm::vec3(i,0,i);
-        l.radius = 4.f;
+        l.radius = 10.f;
         l.color = glm::vec4(glm::rgbColor(glm::vec3(360.f*(i-2)/6,10.0f,10.0f)),1.0);
         lights.push_back(l);
     }
@@ -55,9 +55,9 @@ void DeferedLight::animateLight()
     for(int i = 0; i<lights.size(); ++i)
     {
         float ii = 2+i%10;
-        lights[i].position.x = 3*sin(i*t);
+        lights[i].position.x = 6*sin(i*t);
         lights[i].position.y = lights[i].radius * 0.3;
-        lights[i].position.z = 3*cos(i*t);
+        lights[i].position.z = 6*cos(i*t);
     }
 
     static int i = 1;
