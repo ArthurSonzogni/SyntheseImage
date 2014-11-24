@@ -41,7 +41,7 @@ void DeferedLight::populateLight()
     {
         Light l;
         l.position = glm::vec3(i,0,i);
-        l.radius = 10.f;
+        l.radius = 4.f;
         l.color = glm::vec4(glm::rgbColor(glm::vec3(360.f*(i-2)/6,10.0f,10.0f)),1.0);
         lights.push_back(l);
     }
@@ -55,15 +55,15 @@ void DeferedLight::animateLight()
     for(int i = 0; i<lights.size(); ++i)
     {
         float ii = 2+i%10;
-        lights[i].position.x = 6*sin(i*t);
+        lights[i].position.x = 3*sin(i*t);
         lights[i].position.y = lights[i].radius * 0.3;
-        lights[i].position.z = 6*cos(i*t);
+        lights[i].position.z = 3*cos(i*t);
     }
 
     static int i = 1;
-    lights[0].position = glm::vec3(1.0,5.0,3.0);
-    lights[0].radius = 10.f;
-    lights[0].color = glm::vec4(1.0);
+    //lights[0].position = glm::vec3(1.0,5.0,3.0);
+    //lights[0].radius = 10.f;
+    //lights[0].color = glm::vec4(1.0);
 }
 
 void DeferedLight::secondPass()
@@ -152,6 +152,7 @@ void DeferedLight::secondPass()
         sphere.getShader().setUniform("colorMap",1);
         sphere.getShader().setUniform("normalMap",2);
 
+        sphere.getShader().setUniform("solidLength",lightSolidLength);
 
         for(int i = 0; i<lights.size(); ++i)
         {
@@ -215,9 +216,11 @@ void DeferedLight::initTwBar()
     lightPassEnable = false;
     occlusionPassEnable= false;
     reflectionPassEnable = false;
+    lightSolidLength = 0.01;
     //TwAddSeparator(menuBar, NULL, " group='shader pass' ");
     TwAddVarRW(menuBar,"AmbientPass",TW_TYPE_BOOLCPP,&ambientPassEnable,"label=\"ambient pass\" group=\"pass\"");
     TwAddVarRW(menuBar,"LightPass",TW_TYPE_BOOLCPP,&lightPassEnable,"label=\"light pass\" group=\"pass\"");
     TwAddVarRW(menuBar,"OcclusionPass",TW_TYPE_BOOLCPP,&occlusionPassEnable,"label=\"occlusion pass\" group=\"pass\"");
     TwAddVarRW(menuBar,"ReflectionPass",TW_TYPE_BOOLCPP,&reflectionPassEnable,"label=\"reflection pass\" group=\"pass\"");
+    TwAddVarRW(menuBar,"lightSolidLength",TW_TYPE_FLOAT,&lightSolidLength,"label=\"lightSolidLength\" group=\"pass\" min=0.0 max=1.0 step=0.02");
 }
