@@ -16,7 +16,7 @@ class DeferedFirstPass : public DeferedBase
 		void loadModel(const char *fileName);
 
     protected:
-		void initTwBar();
+		virtual void initTwBar();
 
         int objIndex;
         ModelObj* obj;
@@ -33,6 +33,7 @@ class DeferedFirstPass : public DeferedBase
 		TwBar *menuBar;
 
 		sf::Mutex loadingMutex;
+
 };
 
 
