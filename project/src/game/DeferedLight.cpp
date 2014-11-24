@@ -75,7 +75,9 @@ void DeferedLight::secondPass()
     // ambient//
     ///////////
     
-    if (Input::isKeyHold(GLFW_KEY_Q))
+    static bool KQ= false;
+    KQ^= Input::isKeyPressed(GLFW_KEY_Q);
+    if (KQ)
     {
         glEnable(GL_BLEND);
         glBlendEquation(GL_FUNC_ADD);
@@ -92,7 +94,9 @@ void DeferedLight::secondPass()
     // reflection//
     //////////////
     
-    if (Input::isKeyHold(GLFW_KEY_R))
+    static bool KR = false;
+    KR ^= Input::isKeyPressed(GLFW_KEY_R);
+    if (KR)
     {
 
         glEnable(GL_BLEND);
@@ -119,6 +123,9 @@ void DeferedLight::secondPass()
         reflectionObj.getShader().setUniform("positionMap",0);
         reflectionObj.getShader().setUniform("colorMap",1);
         reflectionObj.getShader().setUniform("normalMap",2);
+        reflectionObj.getShader().setUniform("depthMap",3);
+        reflectionObj.getShader().setUniform("inverseProjection",glm::inverse(projection));
+        reflectionObj.getShader().setUniform("near",0.1f);
         reflectionObj.getShader().setUniform("projection",projection);
         reflectionObj.draw();
     }
@@ -126,7 +133,9 @@ void DeferedLight::secondPass()
     // local//
     /////////
     
-    if (!Input::isKeyHold(GLFW_KEY_L))
+    static bool KL = false;
+    KL ^= Input::isKeyPressed(GLFW_KEY_L);
+    if (KL)
     {
         glEnable(GL_BLEND);
         glBlendEquation(GL_FUNC_ADD);
@@ -164,7 +173,9 @@ void DeferedLight::secondPass()
     // occlusion //
     //////////////
     
-    if (!Input::isKeyHold(GLFW_KEY_O))
+    static bool KO = false;
+    KO ^= Input::isKeyPressed(GLFW_KEY_O);
+    if (KO)
     {
         glEnable(GL_BLEND);
         glBlendEquation(GL_FUNC_REVERSE_SUBTRACT);

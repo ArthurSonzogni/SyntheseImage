@@ -123,14 +123,16 @@ void FrameBuffer::bindToWrite()
 void FrameBuffer::bindToRead()
 {
     glCheckError(__FILE__,__LINE__);
+
     glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-    glCheckError(__FILE__,__LINE__);
-    for (unsigned int i = 0 ; i < colorTextures.size(); i++) {
+    unsigned int i = 0;
+    for (i = 0 ; i < colorTextures.size(); i++) {
         glActiveTexture(GL_TEXTURE0 + i);
-        glCheckError(__FILE__,__LINE__);
         glBindTexture(GL_TEXTURE_2D, colorTextures[i]);
-        glCheckError(__FILE__,__LINE__);
     }
+    glActiveTexture(GL_TEXTURE0 + i);
+    glBindTexture(GL_TEXTURE_2D, depthTexture);
+
     glCheckError(__FILE__,__LINE__);
 }
 
@@ -152,7 +154,8 @@ void FrameBuffer::drawToScreen()
 
     unsigned int x=0;
     unsigned int y=0;
-    for(unsigned int i = 0; i<colorTextures.size(); ++i) {
+    unsigned int i = 0;
+    for(i = 0; i<colorTextures.size(); ++i) {
         // draw
         glReadBuffer(GL_COLOR_ATTACHMENT0 + i);
         glBlitFramebuffer(
