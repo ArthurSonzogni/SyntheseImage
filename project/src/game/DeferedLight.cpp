@@ -76,6 +76,12 @@ void DeferedLight::secondPass()
     ///////////
     
     static bool KQ= false;
+    
+    static int ok = true;
+    if (ok)
+    TwAddVarRW(menuBar,"AmbientPass",TW_TYPE_BOOLCPP,&KQ,"label=\"ambient pass\"");
+    ok = false;
+    //TwAddVarRW(menuBar,"AmbientPass",TW_TYPE_BOOL,&KQ,"label=\"ambient pass\"");
     KQ^= Input::isKeyPressed(GLFW_KEY_Q);
     if (KQ)
     {
