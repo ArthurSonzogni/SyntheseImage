@@ -77,6 +77,7 @@ DeferedFirstPass::DeferedFirstPass():
 	TwInit(TW_OPENGL_CORE, NULL);
 	TwWindowSize(getWidth(), getHeight());
 	menuBar = TwNewBar("Coucou");
+
 	initTwBar();
 
 	glfwSetWindowSizeCallback(this->getWindow(), (GLFWwindowposfun)TwWindowSizeGLFW3);
@@ -149,12 +150,11 @@ void DeferedFirstPass::firstPass()
 
 void DeferedFirstPass::initTwBar()
 {
-	TwAddButton(menuBar, "Model list", NULL, NULL, " label='Models'");
 	std::vector<std::string> objList = directoryListFiles("./obj");
 	for(std::vector<std::string>::iterator it = objList.begin() ; it != objList.end() ; it++)
 	{
 		const char *name = it->c_str();
-		const char *desc = (std::string(" label='")+*it+std::string("'")).c_str();
+		const char *desc = (std::string(" label='")+*it+std::string("' group='model'")).c_str();
 		ObjectAndString *oas = new ObjectAndString;
 		oas->instance = this;
 		oas->str = *it;

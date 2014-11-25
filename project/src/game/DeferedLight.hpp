@@ -28,6 +28,17 @@ class DeferedLight : public DeferedFirstPass
         ModelObj ambientObj;
         ModelObj occlusionObj;
         ModelObj reflectionObj;
+
+        // pass activation
+        virtual void initTwBar();
+
+        bool ambientPassEnable;
+        bool occlusionPassEnable;
+        bool reflectionPassEnable;
+        bool lightPassEnable;
+
+        float lightSolidLength;
+
 };
 
 #endif /* end of include guard: DeferedLIGHT_DEF*/

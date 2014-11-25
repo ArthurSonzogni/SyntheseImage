@@ -6,6 +6,7 @@ uniform sampler2D normalMap;
 
 uniform vec4 lightColor = vec4(1.0);
 uniform float lightRadius = 3.0;
+uniform float solidLength = 0.01;
 
 in vec2 fTexCoord;
 in vec3 fLightPosition;
@@ -33,7 +34,7 @@ void main()
 
     float d = length(fLightDirection.xy);
 
-    if (d<0.1)
+    if (d<solidLength)
         gl_FragColor = lightColor;
     else
         gl_FragColor = color * lightColor * light;

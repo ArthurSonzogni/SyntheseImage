@@ -30,6 +30,8 @@ DeferedLight::DeferedLight():
 {
     glCheckError(__FILE__,__LINE__);
     populateLight();
+
+    initTwBar();
 }
 
 
@@ -59,9 +61,9 @@ void DeferedLight::animateLight()
     }
 
     static int i = 1;
-    lights[0].position = glm::vec3(1.0,5.0,3.0);
-    lights[0].radius = 10.f;
-    lights[0].color = glm::vec4(1.0);
+    //lights[0].position = glm::vec3(1.0,5.0,3.0);
+    //lights[0].radius = 10.f;
+    //lights[0].color = glm::vec4(1.0);
 }
 
 void DeferedLight::secondPass()
@@ -75,15 +77,8 @@ void DeferedLight::secondPass()
     // ambient//
     ///////////
     
-    static bool KQ= false;
-    
-    static int ok = true;
-    if (ok)
-    TwAddVarRW(menuBar,"AmbientPass",TW_TYPE_BOOLCPP,&KQ,"label=\"ambient pass\"");
-    ok = false;
-    //TwAddVarRW(menuBar,"AmbientPass",TW_TYPE_BOOL,&KQ,"label=\"ambient pass\"");
-    KQ^= Input::isKeyPressed(GLFW_KEY_Q);
-    if (KQ)
+    ambientPassEnable^= Input::isKeyPressed(GLFW_KEY_Q);
+    if (ambientPassEnable)
     {
         glEnable(GL_BLEND);
         glBlendEquation(GL_FUNC_ADD);
@@ -100,9 +95,8 @@ void DeferedLight::secondPass()
     // reflection//
     //////////////
     
-    static bool KR = false;
-    KR ^= Input::isKeyPressed(GLFW_KEY_R);
-    if (KR)
+    reflectionPassEnable ^= Input::isKeyPressed(GLFW_KEY_R);
+    if (reflectionPassEnable)
     {
 
         glEnable(GL_BLEND);
@@ -139,9 +133,8 @@ void DeferedLight::secondPass()
     // local//
     /////////
     
-    static bool KL = false;
-    KL ^= Input::isKeyPressed(GLFW_KEY_L);
-    if (KL)
+    lightPassEnable ^= Input::isKeyPressed(GLFW_KEY_L);
+    if (lightPassEnable)
     {
         glEnable(GL_BLEND);
         glBlendEquation(GL_FUNC_ADD);
@@ -159,6 +152,7 @@ void DeferedLight::secondPass()
         sphere.getShader().setUniform("colorMap",1);
         sphere.getShader().setUniform("normalMap",2);
 
+        sphere.getShader().setUniform("solidLength",lightSolidLength);
 
         for(int i = 0; i<lights.size(); ++i)
         {
@@ -179,9 +173,8 @@ void DeferedLight::secondPass()
     // occlusion //
     //////////////
     
-    static bool KO = false;
-    KO ^= Input::isKeyPressed(GLFW_KEY_O);
-    if (KO)
+    occlusionPassEnable ^= Input::isKeyPressed(GLFW_KEY_O);
+    if (occlusionPassEnable)
     {
         glEnable(GL_BLEND);
         glBlendEquation(GL_FUNC_REVERSE_SUBTRACT);
@@ -215,4 +208,19 @@ void DeferedLight::secondPass()
     glDisable(GL_BLEND);
     glBlendEquation(GL_FUNC_ADD);
     glBlendFunc(GL_ONE,GL_ONE);
+}
+
+void DeferedLight::initTwBar()
+{
+    ambientPassEnable = true;
+    lightPassEnable = false;
+    occlusionPassEnable= false;
+    reflectionPassEnable = false;
+    lightSolidLength = 0.01;
+    //TwAddSeparator(menuBar, NULL, " group='shader pass' ");
+    TwAddVarRW(menuBar,"AmbientPass",TW_TYPE_BOOLCPP,&ambientPassEnable,"label=\"ambient pass\" group=\"pass\"");
+    TwAddVarRW(menuBar,"LightPass",TW_TYPE_BOOLCPP,&lightPassEnable,"label=\"light pass\" group=\"pass\"");
+    TwAddVarRW(menuBar,"OcclusionPass",TW_TYPE_BOOLCPP,&occlusionPassEnable,"label=\"occlusion pass\" group=\"pass\"");
+    TwAddVarRW(menuBar,"ReflectionPass",TW_TYPE_BOOLCPP,&reflectionPassEnable,"label=\"reflection pass\" group=\"pass\"");
+    TwAddVarRW(menuBar,"lightSolidLength",TW_TYPE_FLOAT,&lightSolidLength,"label=\"lightSolidLength\" group=\"pass\" min=0.0 max=1.0 step=0.02");
 }
