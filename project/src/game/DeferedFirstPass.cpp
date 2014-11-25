@@ -164,7 +164,7 @@ void DeferedFirstPass::firstPass()
     //  Light //
     ///////////
     
-    if (lightPassEnable)
+    if (lightObjEnable)
     {
         sphereObj.getShader().use();
         sphereObj.getShader().setUniform("projection",projection);
@@ -210,6 +210,10 @@ void DeferedFirstPass::initTwBar()
 		TwAddButton(menuBar, name, &LoadTexCallback, (void*)oas, desc);
 	}
     lightPassEnable = false;
+    TwAddVarRW(menuBar,"animateLight",TW_TYPE_BOOLCPP,&animateLightEnable,"label=\"animatedLight\" group=\"light\"");
+    animateLightEnable = true;
+    TwAddVarRW(menuBar,"lightObjEnable",TW_TYPE_BOOLCPP,&lightObjEnable,"label=\"lightObjEnable\" group=\"light\"");
+    lightObjEnable = true;
 }
 
 void DeferedFirstPass::loadTexture(const char *fileName)
@@ -260,19 +264,22 @@ void DeferedFirstPass::populateLight()
 
 void DeferedFirstPass::animateLight()
 {
-    static float t = 0.0;
-    t += getFrameDeltaTime() * 0.5;
-    //cout << t << endl;
-    for(int i = 0; i<lights.size(); ++i)
+    if (animateLightEnable)
     {
-        float ii = i+2;
-        lights[i].position.x = 5*sin(ii*t);
-        lights[i].position.y = (4*(1+sin(i*t))+lights[i].sphereRadius)*lights[i].sphereRadius;
-        lights[i].position.z = 5*cos(ii*t);
-    }
+        static float t = 0.0;
+        t += getFrameDeltaTime() * 0.5;
+        //cout << t << endl;
+        for(int i = 0; i<lights.size(); ++i)
+        {
+            float ii = i+2;
+            lights[i].position.x = 5*sin(ii*t);
+            lights[i].position.y = (4*(1+sin(i*t))+lights[i].sphereRadius)*lights[i].sphereRadius;
+            lights[i].position.z = 5*cos(ii*t);
+        }
 
-    static int i = 1;
-    //lights[0].position = glm::vec3(1.0,5.0,3.0);
-    //lights[0].radius = 10.f;
-    //lights[0].color = glm::vec4(1.0);
+        static int i = 1;
+        //lights[0].position = glm::vec3(1.0,5.0,3.0);
+        //lights[0].radius = 10.f;
+        //lights[0].color = glm::vec4(1.0);
+    }
 }

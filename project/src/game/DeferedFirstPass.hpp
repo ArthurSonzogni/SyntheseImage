@@ -51,6 +51,8 @@ class DeferedFirstPass : public DeferedBase
 		sf::Mutex loadingMutex;
 
         bool lightPassEnable;
+        bool animateLightEnable;
+        bool lightObjEnable;
 
 };
 

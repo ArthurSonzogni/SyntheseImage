@@ -28,7 +28,6 @@ class DeferedLight : public DeferedFirstPass
         bool reflectionPassEnable;
 
         float lightSolidLength;
-
 };
 
 #endif /* end of include guard: DeferedLIGHT_DEF*/
