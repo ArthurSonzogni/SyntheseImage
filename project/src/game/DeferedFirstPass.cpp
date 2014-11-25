@@ -47,6 +47,12 @@ void LoadObjCallback(void *clientData)
 	oas->instance->loadModel(oas->str.c_str());
 }
 
+void LoadTexCallback(void *clientData)
+{
+	ObjectAndString *oas = (ObjectAndString*)clientData;
+	oas->instance->loadTexture(oas->str.c_str());
+}
+
 
 DeferedFirstPass::DeferedFirstPass():
     DeferedBase(),
@@ -160,6 +166,23 @@ void DeferedFirstPass::initTwBar()
 		oas->str = *it;
 		TwAddButton(menuBar, name, &LoadObjCallback, (void*)oas, desc);
 	}
+
+	std::vector<std::string> texList = directoryListFiles("./texture");
+	for(std::vector<std::string>::iterator it = texList.begin() ; it != texList.end() ; it++)
+	{
+		const char *name = it->c_str();
+		const char *desc = (std::string(" label='")+*it+std::string("' group='Model texture'")).c_str();
+		ObjectAndString *oas = new ObjectAndString;
+		oas->instance = this;
+		oas->str = *it;
+		TwAddButton(menuBar, name, &LoadTexCallback, (void*)oas, desc);
+	}
+}
+
+void DeferedFirstPass::loadTexture(const char *fileName)
+{
+	std::string target = std::string("texture/")+std::string(fileName);
+	obj->loadTexture(target.c_str());
 }
 
 void DeferedFirstPass::loadModel(const char *fileName)

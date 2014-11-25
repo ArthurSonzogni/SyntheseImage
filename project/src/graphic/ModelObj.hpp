@@ -20,11 +20,12 @@ class ModelObj
 		Texture& getTexture();
         bool hasTexture;
         Obj::Dimension getDimension();
+		void loadTexture(const char *fileName);
     private:
         Obj obj;
         GLuint vao;
         ShaderProgram& shader;
-        Texture& texture;
+        Texture *texture;
 };
 
 #endif /* end of include guard: MODELOBJ_IZ6KZI5P */

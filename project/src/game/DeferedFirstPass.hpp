@@ -15,6 +15,7 @@ class DeferedFirstPass : public DeferedBase
         DeferedFirstPass();
 		~DeferedFirstPass();
 		void loadModel(const char *fileName);
+		void loadTexture(const char *fileName);
 
     protected:
 		virtual void initTwBar();

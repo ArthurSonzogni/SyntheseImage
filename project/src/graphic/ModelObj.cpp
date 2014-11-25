@@ -15,10 +15,9 @@ ModelObj::ModelObj(const char * filename, ShaderProgram& _shader, const char * t
     obj(filename),
     hasTexture(true),
     shader(_shader),
-    texture(Texture::loadFromFile(
-        textureName
-    ))
+    texture(NULL)
 {
+    texture = new Texture(Texture::loadFromFile(textureName));
     shader.use();
     // vao allocation
     glGenVertexArrays(1,&vao);
@@ -41,10 +40,9 @@ ModelObj::ModelObj(const char * filename, ShaderProgram& _shader):
     obj(filename),
     hasTexture(false),
     shader(_shader),
-    texture(Texture::loadFromFile(
-        "texture/brick.jpg"
-    ))
+    texture(NULL)
 {
+    texture = new Texture(Texture::loadFromFile("texture/brick.jpg"));
     shader.use();
     // vao allocation
     glGenVertexArrays(1,&vao);
@@ -67,8 +65,9 @@ ModelObj::ModelObj(const char * filename, ShaderProgram& _shader, Texture& _text
     obj(filename),
     hasTexture(true),
     shader(_shader),
-    texture(_texture)
+    texture(NULL)
 {
+	texture = new Texture(_texture);
     shader.use();
     // vao allocation
     glGenVertexArrays(1,&vao);
@@ -99,7 +98,7 @@ void ModelObj::draw()
 
     if (hasTexture)
     {
-        texture.bind(GL_TEXTURE0);
+        texture->bind(GL_TEXTURE0);
         shader.setUniform("texture0",0);
     }
 
@@ -123,10 +122,16 @@ ShaderProgram& ModelObj::getShader()
 
 Texture& ModelObj::getTexture()
 {
-	return texture;
+	return *texture;
 }
 
 Obj::Dimension ModelObj::getDimension()
 {
     return obj.getDimension();
+}
+
+void ModelObj::loadTexture(const char *fileName)
+{
+	if(texture) delete texture;
+	texture = new Texture(Texture::loadFromFile(fileName));
 }
