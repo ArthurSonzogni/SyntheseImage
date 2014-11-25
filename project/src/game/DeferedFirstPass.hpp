@@ -17,12 +17,26 @@ class DeferedFirstPass : public DeferedBase
 		void loadModel(const char *fileName);
 		void loadTexture(const char *fileName);
 
+        struct Light
+        {
+            glm::vec3 position;
+            glm::vec4 color;
+            float radius;
+            float sphereRadius;
+        };
+
     protected:
+
+        std::vector<Light> lights;
+        void populateLight();
+        void animateLight();
+
 		virtual void initTwBar();
 
         int objIndex;
         ModelObj* obj;
         ModelObj ground;
+        ModelObj sphereObj;
         GLuint texture;
         void firstPass();
 		void loop();
@@ -35,6 +49,8 @@ class DeferedFirstPass : public DeferedBase
 		TwBar *menuBar;
 
 		sf::Mutex loadingMutex;
+
+        bool lightPassEnable;
 
 };
 

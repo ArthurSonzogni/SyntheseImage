@@ -76,7 +76,7 @@ void main()
         }
     }
 
-    gl_FragColor.a = 0.5*(1.0-5*best - 1.0*(bestI + bestDI)/maxStep);
+    gl_FragColor.a = 0.5*(1.0-3.2*best - 1.0*(bestI + bestDI)/maxStep);
 
 }
 /*void main()*/

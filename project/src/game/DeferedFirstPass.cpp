@@ -66,6 +66,10 @@ DeferedFirstPass::DeferedFirstPass():
     ),
         "texture/texture.png"
     ),
+    sphereObj("obj/sphere.obj",ShaderProgram::loadFromFile(
+        "shader/geometryPassColor.vert",
+        "shader/geometryPassColor.frag"
+    )),
 	camera(NULL),
 	menuBar(NULL)
 {
@@ -92,6 +96,8 @@ DeferedFirstPass::DeferedFirstPass():
 	glfwSetScrollCallback(this->getWindow(), (GLFWscrollfun)TwEventMouseWheelGLFW3);
 	glfwSetKeyCallback(this->getWindow(), (GLFWkeyfun)TwEventKeyGLFW3);
 	glfwSetCharCallback(this->getWindow(), (GLFWcharfun)TwEventCharGLFW3);
+
+    populateLight();
 }
 
 void DeferedFirstPass::loop()
@@ -103,6 +109,8 @@ void DeferedFirstPass::loop()
 
 void DeferedFirstPass::firstPass()
 {
+    animateLight();
+
 	camera->update();
 	view = camera->lookAt();
 
@@ -151,6 +159,30 @@ void DeferedFirstPass::firstPass()
     }
     obj->getShader().setUniform("model",objTransform);
     obj->draw();
+
+    /////////////
+    //  Light //
+    ///////////
+    
+    if (lightPassEnable)
+    {
+        sphereObj.getShader().use();
+        sphereObj.getShader().setUniform("projection",projection);
+        sphereObj.getShader().setUniform("view",view);
+
+        for(int i = 0; i<lights.size(); ++i)
+        {
+            sphereObj.getShader().use();
+            sphereObj.getShader().setUniform("color",lights[i].color);
+            sphereObj.getShader().setUniform("view",glm::scale(glm::translate(view,lights[i].position),glm::vec3(lights[i].sphereRadius)));
+            sphereObj.draw();
+        }
+
+        // culling
+        glEnable(GL_CULL_FACE);
+        glCullFace(GL_BACK);
+    }
+
 	//loadingMutex.unlock();
 }
 
@@ -177,6 +209,7 @@ void DeferedFirstPass::initTwBar()
 		oas->str = *it;
 		TwAddButton(menuBar, name, &LoadTexCallback, (void*)oas, desc);
 	}
+    lightPassEnable = false;
 }
 
 void DeferedFirstPass::loadTexture(const char *fileName)
@@ -210,4 +243,36 @@ void DeferedFirstPass::loadModel(const char *fileName)
 DeferedFirstPass::~DeferedFirstPass()
 {
 	TwTerminate();
+}
+
+void DeferedFirstPass::populateLight()
+{
+    for(int i = 0; i < 6; ++i)
+    {
+        Light l;
+        l.position = glm::vec3(i,0,i);
+        l.radius = 10.f;
+        l.sphereRadius = 0.4;
+        l.color = glm::vec4(glm::rgbColor(glm::vec3(360.f*(i-2)/6,10.0f,10.0f)),1.0);
+        lights.push_back(l);
+    }
+}
+
+void DeferedFirstPass::animateLight()
+{
+    static float t = 0.0;
+    t += getFrameDeltaTime() * 0.5;
+    //cout << t << endl;
+    for(int i = 0; i<lights.size(); ++i)
+    {
+        float ii = i+2;
+        lights[i].position.x = 5*sin(ii*t);
+        lights[i].position.y = (4*(1+sin(i*t))+lights[i].sphereRadius)*lights[i].sphereRadius;
+        lights[i].position.z = 5*cos(ii*t);
+    }
+
+    static int i = 1;
+    //lights[0].position = glm::vec3(1.0,5.0,3.0);
+    //lights[0].radius = 10.f;
+    //lights[0].color = glm::vec4(1.0);
 }

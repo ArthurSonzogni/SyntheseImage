@@ -11,18 +11,9 @@ class DeferedLight : public DeferedFirstPass
 
         DeferedLight();
 
-        struct Light
-        {
-            glm::vec3 position;
-            glm::vec4 color;
-            float radius;
-        };
 
         
     protected:
-        std::vector<Light> lights;
-        void populateLight();
-        void animateLight();
         virtual void secondPass();
         ModelObj sphere;
         ModelObj ambientObj;
@@ -35,7 +26,6 @@ class DeferedLight : public DeferedFirstPass
         bool ambientPassEnable;
         bool occlusionPassEnable;
         bool reflectionPassEnable;
-        bool lightPassEnable;
 
         float lightSolidLength;
 

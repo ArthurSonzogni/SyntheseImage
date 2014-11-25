@@ -14,5 +14,6 @@ void main()
 {
     outWorldPos = vec4(fPosition,1.0);
     outDiffuse  = color;
+    outDiffuse.rgb *= 5.0;
     outNormal   = fNormal;
 } 
