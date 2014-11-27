@@ -53,6 +53,8 @@ class DeferedFirstPass : public DeferedBase
         bool lightPassEnable;
         bool animateLightEnable;
         bool lightObjEnable;
+		bool shadowsEnable;
+		unsigned int nbLight;
 
 };
 

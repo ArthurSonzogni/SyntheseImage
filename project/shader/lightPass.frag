@@ -4,6 +4,7 @@ uniform sampler2D positionMap;
 uniform sampler2D colorMap;
 uniform sampler2D normalMap;
 uniform mat4 projection;
+uniform bool shadowsEnable;
 
 uniform vec4 lightColor = vec4(1.0);
 uniform float lightRadius = 3.0;
@@ -39,27 +40,30 @@ void main()
     light *= dist;
 
 	/* Test for screen space shadows */
-	float rayStepSize = 5.0/maxStep;
-	bool shadowed = false;
-    for(int i = 2; i<maxStep; ++i)
-    {
-        vec3 pos = position+ fLightDirection*i*rayStepSize;
-        vec4 ppos = projection * vec4(pos,0.0);
-        vec2 tpos = ppos.xy/ppos.w*0.5+0.5;
-        vec4 otherPos = vec4(texture(positionMap,tpos).xyz,0.0);
-		vec3 otherDir = vec3(otherPos)-position;
-
-        float scalarProd  = abs(dot(normalize(otherDir),lightDirection));
-
-        if (scalarProd>0.99)
-        {
-			shadowed = true;
-			break;
-        }
-    }
-	if(shadowed)
+	if(shadowsEnable)
 	{
-		light = 0.0;
+		float rayStepSize = 5.0/maxStep;
+		bool shadowed = false;
+		for(int i = 2; i<maxStep; ++i)
+		{
+			vec3 pos = position+ fLightDirection*i*rayStepSize;
+			vec4 ppos = projection * vec4(pos,0.0);
+			vec2 tpos = ppos.xy/ppos.w*0.5+0.5;
+			vec4 otherPos = vec4(texture(positionMap,tpos).xyz,0.0);
+			vec3 otherDir = vec3(otherPos)-position;
+
+			float scalarProd  = abs(dot(normalize(otherDir),lightDirection));
+
+			if (scalarProd>0.99)
+			{
+				shadowed = true;
+				break;
+			}
+		}
+		if(shadowed)
+		{
+			light = 0.0;
+		}
 	}
 	/* end test */
 

@@ -170,7 +170,7 @@ void DeferedFirstPass::firstPass()
         sphereObj.getShader().setUniform("projection",projection);
         sphereObj.getShader().setUniform("view",view);
 
-        for(int i = 0; i<lights.size(); ++i)
+        for(int i = 0; i<nbLight; ++i)
         {
             sphereObj.getShader().use();
             sphereObj.getShader().setUniform("color",lights[i].color);
@@ -213,7 +213,11 @@ void DeferedFirstPass::initTwBar()
     TwAddVarRW(menuBar,"animateLight",TW_TYPE_BOOLCPP,&animateLightEnable,"label=\"animatedLight\" group=\"light\"");
     animateLightEnable = true;
     TwAddVarRW(menuBar,"lightObjEnable",TW_TYPE_BOOLCPP,&lightObjEnable,"label=\"lightObjEnable\" group=\"light\"");
-    lightObjEnable = true;
+    lightObjEnable = false;
+    TwAddVarRW(menuBar,"nbLight",TW_TYPE_UINT32,&nbLight,"label=\"Number of lights\" group=\"light\" min=0 max=6 step=1");
+	nbLight = 6;
+    shadowsEnable = false;
+    TwAddVarRW(menuBar,"enableShadows",TW_TYPE_BOOLCPP,&shadowsEnable,"label=\"Enable Shadows\" group=\"light\"");
 }
 
 void DeferedFirstPass::loadTexture(const char *fileName)

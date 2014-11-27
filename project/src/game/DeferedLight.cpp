@@ -122,7 +122,7 @@ void DeferedLight::secondPass()
 
         sphere.getShader().setUniform("solidLength",lightSolidLength);
 
-        for(int i = 0; i<lights.size(); ++i)
+        for(unsigned int i = 0; i<nbLight; ++i)
         {
             sphere.getShader().use();
             sphere.getShader().setUniform("lightRadius",lights[i].radius);
@@ -130,6 +130,7 @@ void DeferedLight::secondPass()
             sphere.getShader().setUniform("lightPosition",glm::vec3(0.0));
             sphere.getShader().setUniform("lightColor",lights[i].color);
 			sphere.getShader().setUniform("projection",projection);
+			sphere.getShader().setUniform("shadowsEnable",shadowsEnable);
             sphere.draw();
         }
 
@@ -191,4 +192,5 @@ void DeferedLight::initTwBar()
     TwAddVarRW(menuBar,"OcclusionPass",TW_TYPE_BOOLCPP,&occlusionPassEnable,"label=\"occlusion pass\" group=\"pass\"");
     TwAddVarRW(menuBar,"ReflectionPass",TW_TYPE_BOOLCPP,&reflectionPassEnable,"label=\"reflection pass\" group=\"pass\"");
     TwAddVarRW(menuBar,"lightSolidLength",TW_TYPE_FLOAT,&lightSolidLength,"label=\"lightSolidLength\" group=\"pass\" min=0.0 max=1.0 step=0.02");
+
 }
