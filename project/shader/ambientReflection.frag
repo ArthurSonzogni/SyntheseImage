@@ -37,7 +37,7 @@ void main()
     int bestI = 0;
 
     // research 
-    for(int i = 2; i<maxStep; ++i)
+    for(int i = 4; i<maxStep; ++i)
     {
         vec3 pos = position+ r*i*rayStepSize;
         vec4 ppos = projection * vec4(pos,0.0);

@@ -35,7 +35,7 @@ class DeferedFirstPass : public DeferedBase
 
         int objIndex;
         ModelObj* obj;
-        ModelObj ground;
+        ModelObj* ground;
         ModelObj sphereObj;
         GLuint texture;
         void firstPass();
@@ -55,6 +55,10 @@ class DeferedFirstPass : public DeferedBase
         bool lightObjEnable;
 		bool shadowsEnable;
 		unsigned int nbLight;
+
+        Texture* groundColorTexture;
+        Texture* groundNormalTexture;
+        Texture* groundSpecularTexture;
 
 };
 

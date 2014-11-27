@@ -60,25 +60,34 @@ DeferedFirstPass::DeferedFirstPass():
     //obj("obj/Charmander.obj",ShaderProgram::loadFromFile(
     objIndex(0),
     obj(NULL),
-    ground("obj/ground.obj",ShaderProgram::loadFromFile(
-        "shader/geometryPass.vert",
-        "shader/geometryPass.frag"
-    ),
-        "texture/texture.png"
-    ),
+    ground(NULL),
     sphereObj("obj/sphere.obj",ShaderProgram::loadFromFile(
         "shader/geometryPassColor.vert",
         "shader/geometryPassColor.frag"
     )),
 	camera(NULL),
-	menuBar(NULL)
+	menuBar(NULL),
+    groundColorTexture(NULL),
+    groundNormalTexture(NULL),
+    groundSpecularTexture(NULL)
 {
-	obj = new ModelObj("obj/Charmander.obj",ShaderProgram::loadFromFile(
-				"shader/geometryPass.vert",
-				"shader/geometryPass.frag"
-				),
-			"texture/brick.jpg"
-			);
+    ground = new ModelObj("ground/bumpMapped/obj.obj",ShaderProgram::loadFromFile(
+        "shader/geometryPassBumpMapped.vert",
+        "shader/geometryPassBumpMapped.frag"
+    ));
+    
+    //groundColorTexture = &Texture::loadFromFile("ground/bumpMapped/color.jpg");
+    groundColorTexture = &Texture::loadFromFile("ground/bumpMapped/color.jpg");
+    groundNormalTexture = &Texture::loadFromFile("ground/bumpMapped/normal.jpg");
+    groundSpecularTexture = &Texture::loadFromFile("ground/bumpMapped/specular.jpg");
+
+
+    obj = new ModelObj("obj/Charmander.obj",ShaderProgram::loadFromFile(
+                "shader/geometryPass.vert",
+                "shader/geometryPass.frag"
+                ),
+        "texture/brick.jpg"
+    );
 
 	camera = new Camera();
 	camera->setTarget(glm::vec3(0.0, 3.0, 0.0));
@@ -115,11 +124,24 @@ void DeferedFirstPass::firstPass()
 	view = camera->lookAt();
 
     projection = glm::perspective(70.0f, float(getWidth())/float(getHeight()), 0.1f, 100.0f);
-    ground.getShader().use();
-    ground.getShader().setUniform("projection",projection);
-    ground.getShader().setUniform("view",view);
-    ground.getShader().setUniform("model",glm::mat4(1.f));
-    ground.draw();
+
+    /////////////
+    // ground //
+    ///////////
+
+
+    ground->getShader().use();
+    ground->getShader().setUniform("projection",projection);
+    ground->getShader().setUniform("view",view);
+    ground->getShader().setUniform("model",glm::mat4(1.f));
+    groundColorTexture->bind(GL_TEXTURE0+0);
+    ground->getShader().setUniform("colorTexture",0);
+    groundNormalTexture->bind(GL_TEXTURE0+1);
+    ground->getShader().setUniform("normalTexture",1);
+    groundSpecularTexture->bind(GL_TEXTURE0+2);
+    ground->getShader().setUniform("specularTexture",2);
+    ground->draw();
+
     ////////////
     //  Obj ///
     //////////
@@ -141,10 +163,16 @@ void DeferedFirstPass::firstPass()
         };
         objIndex = (objIndex+1)%3;
         if (obj) delete obj;
-        obj = new ModelObj(objName[objIndex],ground.getShader(),textureName[objIndex]);
+        obj = new ModelObj(objName[objIndex],ShaderProgram::loadFromFile(
+            "shader/geometryPass.vert",
+            "shader/geometryPass.frag"
+        ),textureName[objIndex]);
     }
 
     obj -> getShader().use();
+    obj -> getShader().setUniform("projection",projection);
+    obj -> getShader().setUniform("view",view);
+    obj -> getShader().setUniform("model",glm::mat4(1.f));
     glm::mat4 objTransform(1.0);
     float size = 4.0;
     {
