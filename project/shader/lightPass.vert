@@ -10,7 +10,6 @@ uniform mat4 view = mat4(1);
 uniform vec3 lightPosition = vec3(0);
 
 out vec3 fLightPosition;
-out vec2 fTexCoord;
 
 void main()
 {
@@ -19,5 +18,4 @@ void main()
     fLightPosition = (view * model * vec4(lightPosition,1.0)).xyz;
 
     gl_Position = projection * worldPos;
-    fTexCoord = gl_Position.xy/gl_Position.w * 0.5 + 0.5;
 }

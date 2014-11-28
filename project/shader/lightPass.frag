@@ -31,7 +31,7 @@ void main()
     vec3 lightDirection = normalize(fLightDirection);
     float diffuseCoef  = max(0,dot(normal,lightDirection));
     float specularCoef = max(0,dot(reflect(normalize(position),normal),lightDirection));
-    float light = specularCoef*1.0 + pow(diffuseCoef,8)*texture(specularMap,texCoord).r;
+    float light = pow(specularCoef,16)*texture(specularMap,texCoord).r + diffuseCoef;
 
 
     float dist = (lightRadius - length(fLightDirection))/lightRadius;

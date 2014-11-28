@@ -134,6 +134,7 @@ void DeferedFirstPass::firstPass()
     ground->getShader().setUniform("projection",projection);
     ground->getShader().setUniform("view",view);
     ground->getShader().setUniform("model",glm::mat4(1.f));
+    ground->getShader().setUniform("screenInvDimensions",glm::vec2(1.0/getWidth(),1.0/getHeight()));
     groundColorTexture->bind(GL_TEXTURE0+0);
     ground->getShader().setUniform("colorTexture",0);
     groundNormalTexture->bind(GL_TEXTURE0+1);
