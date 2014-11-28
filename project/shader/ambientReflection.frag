@@ -51,7 +51,7 @@ void main()
             best = max(diff,-diff);
             bestI = i;
             gl_FragColor.rgb = texture(colorMap,tpos).rgb;
-            if (best<0.1) break;
+            if (best<0.01) break;
         }
     }
 
