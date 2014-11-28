@@ -50,7 +50,6 @@ void main()
         {
             best = max(diff,-diff);
             bestI = i;
-            gl_FragColor.rgb = texture(colorMap,tpos).rgb;
             if (best<0.01) break;
         }
     }
@@ -71,15 +70,32 @@ void main()
         {
             best = max(diff,-diff);
             bestDI = di;
-            gl_FragColor.rgb = texture(colorMap,tpos).rgb;
             if (best<0.01) break;
         }
     }
 
-    gl_FragColor.a = 1.0-3.2*(best) - 1.0*(bestI + bestDI)/maxStep;
+    // final
+    {
+        vec3 pos = position+ r*(bestI+bestDI)*rayStepSize;
+        vec4 ppos = projection * vec4(pos,0.0);
+        vec2 tpos = ppos.xy/ppos.w*0.5+0.5;
+        float alpha = 1.0;
+        // imprecision penalisation
+        alpha -= 1.2 * best;
+        // distance penalisation
+        alpha -= (bestI+bestDI) / maxStep;
+        // diffuse orientation
+        alpha *= max(0,dot(texture(normalMap,tpos).xyz,-normal));
+        // specular factor 
+        alpha *= texture(specularMap,fTexCoord);
+
+        gl_FragColor.rgb = texture(colorMap,tpos).rgb;
+        gl_FragColor.a = alpha;
+        
+    }
     /*gl_FragColor.rgb = texture(specularMap,fTexCoord).rrr;*/
     /*gl_FragColor.a = 1.0;*/
-    gl_FragColor.a *= texture(specularMap,fTexCoord).r;
+    /*gl_FragColor.a *= texture(specularMap,fTexCoord).r;*/
 
 }
 /*void main()*/
