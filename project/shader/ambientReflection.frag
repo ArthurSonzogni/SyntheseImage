@@ -87,7 +87,7 @@ void main()
         // diffuse orientation
         alpha *= max(0,dot(texture(normalMap,tpos).xyz,-normal));
         // specular factor 
-        alpha *= texture(specularMap,fTexCoord);
+        alpha *= texture(specularMap,fTexCoord).r;
 
         gl_FragColor.rgb = texture(colorMap,tpos).rgb;
         gl_FragColor.a = alpha;
