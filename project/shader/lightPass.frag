@@ -40,10 +40,9 @@ void main()
     light *= dist;
 
 	/* Test for screen space shadows */
-    /*
 	if(shadowsEnable)
 	{
-		float rayStepSize = 5.0/maxStep;
+		float rayStepSize = 1.0/maxStep;
 		bool shadowed = false;
 		for(int i = 2; i<maxStep; ++i)
 		{
@@ -53,9 +52,9 @@ void main()
 			vec4 otherPos = vec4(texture(positionMap,tpos).xyz,0.0);
 			vec3 otherDir = vec3(otherPos)-position;
 
-			float scalarProd  = abs(dot(normalize(otherDir),lightDirection));
+			float scalarProd  = dot(normalize(otherDir),lightDirection);
 
-			if (scalarProd>0.99)
+			if (scalarProd>0.999)
 			{
 				shadowed = true;
 				break;
@@ -66,7 +65,6 @@ void main()
 			light = 0.0;
 		}
 	}
-    */
 	/* end test */
 
     gl_FragColor = color * lightColor * light;
