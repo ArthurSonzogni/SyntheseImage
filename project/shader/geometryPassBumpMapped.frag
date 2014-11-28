@@ -22,7 +22,9 @@ void main()
     outWorldPos = vec4(fPosition,1.0);
     outDiffuse  = texture(colorTexture,fTexCoord);
 
-    vec3 bump = texture(normalTexture,fTexCoord).rgb;
+    vec3 tbump = texture(normalTexture,fTexCoord).rgb * 2.0 - 1.0;
+    vec4 bump = vec4(tbump.r,tbump.b,tbump.g,0.0);
+    /*bump.xz *= 1.0;*/
     /*bump.r = - bump.r;*/
     /*bump.g = - bump.g;*/
     /*bump.b = 1.0;*/
@@ -30,7 +32,9 @@ void main()
     /*bump.y = 0.0;*/
     /*bump.z = 1.0;*/
 
-    outNormal = vec4(normalize(mat3(view * model) * bump.gbr),0.0);
+    vec4 normal = view * model * bump;
+    outNormal = vec4(normalize(vec3(normal)),1.0);
+    /*outNormal = vec4(normalize(mat3(view * model) * bump.rbg),0.0);*/
 
     outSpecular = texture(specularTexture,fTexCoord).rrrr;
 } 

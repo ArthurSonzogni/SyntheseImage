@@ -71,15 +71,18 @@ DeferedFirstPass::DeferedFirstPass():
     groundNormalTexture(NULL),
     groundSpecularTexture(NULL)
 {
-    ground = new ModelObj("ground/bumpMapped/obj.obj",ShaderProgram::loadFromFile(
+    string groundFolder = "ground/test/";
+    //string groundFolder = "ground/normal/";
+
+    ground = new ModelObj((groundFolder+"obj.obj").c_str(),ShaderProgram::loadFromFile(
         "shader/geometryPassBumpMapped.vert",
         "shader/geometryPassBumpMapped.frag"
     ));
     
     //groundColorTexture = &Texture::loadFromFile("ground/bumpMapped/color.jpg");
-    groundColorTexture = new Texture(Texture::loadFromFile("ground/bumpMapped/color.jpg"));
-    groundNormalTexture = new Texture(Texture::loadFromFile("ground/bumpMapped/normal.jpg"));
-    groundSpecularTexture = new Texture(Texture::loadFromFile("ground/bumpMapped/specular.jpg"));
+    groundColorTexture = new Texture(Texture::loadFromFile((groundFolder+"color.jpg").c_str()));
+    groundNormalTexture = new Texture(Texture::loadFromFile((groundFolder+"normal.jpg").c_str()));
+    groundSpecularTexture = new Texture(Texture::loadFromFile((groundFolder+"specular.jpg").c_str()));
 
 
     obj = new ModelObj("obj/Charmander.obj",ShaderProgram::loadFromFile(
