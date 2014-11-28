@@ -28,6 +28,7 @@ class DeferedLight : public DeferedFirstPass
         bool reflectionPassEnable;
 
         float lightSolidLength;
+        glm::vec3 ambientColor;
 };
 
 #endif /* end of include guard: DeferedLIGHT_DEF*/

@@ -55,7 +55,7 @@ void DeferedLight::secondPass()
         ambientObj.getShader().setUniform("positionMap",0);
         ambientObj.getShader().setUniform("colorMap",1);
         ambientObj.getShader().setUniform("normalMap",2);
-        ambientObj.getShader().setUniform("ambientColor",glm::vec4(1.0)*0.6f);
+        ambientObj.getShader().setUniform("ambientColor",glm::vec4(ambientColor,1.0));
         ambientObj.draw();
     }
 
@@ -91,9 +91,8 @@ void DeferedLight::secondPass()
         reflectionObj.getShader().setUniform("positionMap",0);
         reflectionObj.getShader().setUniform("colorMap",1);
         reflectionObj.getShader().setUniform("normalMap",2);
-        reflectionObj.getShader().setUniform("depthMap",3);
+        reflectionObj.getShader().setUniform("specularMap",3);
         reflectionObj.getShader().setUniform("inverseProjection",glm::inverse(projection));
-        reflectionObj.getShader().setUniform("near",0.1f);
         reflectionObj.getShader().setUniform("projection",projection);
         reflectionObj.draw();
     }
@@ -119,6 +118,8 @@ void DeferedLight::secondPass()
         sphere.getShader().setUniform("positionMap",0);
         sphere.getShader().setUniform("colorMap",1);
         sphere.getShader().setUniform("normalMap",2);
+        sphere.getShader().setUniform("specularMap",3);
+        sphere.getShader().setUniform("screenInvDimensions",glm::vec2(1.0/getWidth(),1.0/getHeight()));
 
         sphere.getShader().setUniform("solidLength",lightSolidLength);
 
@@ -186,11 +187,13 @@ void DeferedLight::initTwBar()
     occlusionPassEnable= false;
     reflectionPassEnable = false;
     lightSolidLength = 0.01;
+    ambientColor = glm::vec3(0.1,0.1,0.1);
     //TwAddSeparator(menuBar, NULL, " group='shader pass' ");
     TwAddVarRW(menuBar,"AmbientPass",TW_TYPE_BOOLCPP,&ambientPassEnable,"label=\"ambient pass\" group=\"pass\"");
     TwAddVarRW(menuBar,"LightPass",TW_TYPE_BOOLCPP,&lightPassEnable,"label=\"light pass\" group=\"pass\"");
     TwAddVarRW(menuBar,"OcclusionPass",TW_TYPE_BOOLCPP,&occlusionPassEnable,"label=\"occlusion pass\" group=\"pass\"");
     TwAddVarRW(menuBar,"ReflectionPass",TW_TYPE_BOOLCPP,&reflectionPassEnable,"label=\"reflection pass\" group=\"pass\"");
     TwAddVarRW(menuBar,"lightSolidLength",TW_TYPE_FLOAT,&lightSolidLength,"label=\"lightSolidLength\" group=\"pass\" min=0.0 max=1.0 step=0.02");
+    TwAddVarRW(menuBar,"ambientColor",TW_TYPE_COLOR3F,&ambientColor,"label=\"ambientColor\" group=\"light\"");
 
 }

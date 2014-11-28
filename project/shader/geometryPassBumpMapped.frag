@@ -1,29 +1,36 @@
 #version 330
 
 in vec3 fPosition;
-in vec3 fNormal;
-in vec3 fTangent;
-in vec3 fBitangent;
 in vec2 fTexCoord;
+
+in mat3 repere;
 
 layout (location = 0) out vec4 outWorldPos;
 layout (location = 1) out vec4 outDiffuse;
 layout (location = 2) out vec4 outNormal;
+layout (location = 3) out vec4 outSpecular;
 
 uniform sampler2D colorTexture;
 uniform sampler2D normalTexture;
 uniform sampler2D specularTexture;
 
+uniform mat4 model = mat4(1);
+uniform mat4 view = mat4(1);
+
 void main()
 {
     outWorldPos = vec4(fPosition,1.0);
-    outDiffuse  = texture(normalTexture,fTexCoord);
+    outDiffuse  = texture(colorTexture,fTexCoord);
 
     vec3 bump = texture(normalTexture,fTexCoord).rgb;
+    /*bump.r = - bump.r;*/
+    /*bump.g = - bump.g;*/
+    /*bump.b = 1.0;*/
+    /*bump.x = 0.0;*/
+    /*bump.y = 0.0;*/
+    /*bump.z = 1.0;*/
 
-    vec3 normal = normalize(fNormal);
-    vec3 tangent = normalize(fTangent);
-    vec3 bitangent = normalize(fBitangent);
+    outNormal = vec4(normalize(mat3(view * model) * bump.gbr),0.0);
 
-    outNormal = vec4(normalize(normal * bump.b + tangent * bump.r + bitangent * bump.g),1.0);
+    outSpecular = texture(specularTexture,fTexCoord).rrrr;
 } 

@@ -77,9 +77,9 @@ DeferedFirstPass::DeferedFirstPass():
     ));
     
     //groundColorTexture = &Texture::loadFromFile("ground/bumpMapped/color.jpg");
-    groundColorTexture = &Texture::loadFromFile("ground/bumpMapped/color.jpg");
-    groundNormalTexture = &Texture::loadFromFile("ground/bumpMapped/normal.jpg");
-    groundSpecularTexture = &Texture::loadFromFile("ground/bumpMapped/specular.jpg");
+    groundColorTexture = new Texture(Texture::loadFromFile("ground/bumpMapped/color.jpg"));
+    groundNormalTexture = new Texture(Texture::loadFromFile("ground/bumpMapped/normal.jpg"));
+    groundSpecularTexture = new Texture(Texture::loadFromFile("ground/bumpMapped/specular.jpg"));
 
 
     obj = new ModelObj("obj/Charmander.obj",ShaderProgram::loadFromFile(
@@ -287,7 +287,7 @@ void DeferedFirstPass::populateLight()
     {
         Light l;
         l.position = glm::vec3(i,0,i);
-        l.radius = 40.f;
+        l.radius = 5.f;
         l.sphereRadius = 0.4;
         l.color = glm::vec4(glm::rgbColor(glm::vec3(360.f*(i-2)/6,10.0f,10.0f)),1.0);
         lights.push_back(l);

@@ -3,7 +3,7 @@
 uniform sampler2D positionMap;
 uniform sampler2D colorMap;
 uniform sampler2D normalMap;
-uniform sampler2D depthMap;
+uniform sampler2D specularMap;
 uniform mat4 projection;
 
 uniform vec4 ambientColor;
@@ -37,7 +37,7 @@ void main()
     int bestI = 0;
 
     // research 
-    for(int i = 4; i<maxStep; ++i)
+    for(int i = 2; i<maxStep; ++i)
     {
         vec3 pos = position+ r*i*rayStepSize;
         vec4 ppos = projection * vec4(pos,0.0);
@@ -76,7 +76,10 @@ void main()
         }
     }
 
-    gl_FragColor.a = 0.5*(1.0-3.2*best - 1.0*(bestI + bestDI)/maxStep);
+    gl_FragColor.a = 1.0-3.2*(best) - 1.0*(bestI + bestDI)/maxStep;
+    /*gl_FragColor.rgb = texture(specularMap,fTexCoord).rrr;*/
+    /*gl_FragColor.a = 1.0;*/
+    gl_FragColor.a *= texture(specularMap,fTexCoord).r;
 
 }
 /*void main()*/

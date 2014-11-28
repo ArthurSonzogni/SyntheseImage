@@ -21,6 +21,7 @@ Camera::Camera()
 
 void Camera::update()
 {
+    if (Input::isKeyHold(GLFW_KEY_TAB)) return;
 	// Manage rotation
 	if(Input::isMouseHold(GLFW_MOUSE_BUTTON_LEFT))
 	{

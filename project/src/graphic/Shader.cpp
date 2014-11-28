@@ -258,6 +258,10 @@ ShaderProgram::ShaderProgram(const ShaderProgram& other)
     cout<<"[error] trying to copy a shaderProgram"<<endl;
 }
 
+void ShaderProgram::setUniform(const std::string& name, const glm::vec2 & v)
+{
+    glUniform2fv(uniform(name), 1, value_ptr(v));
+}
 void ShaderProgram::setUniform(const std::string& name,float x,float y,float z)
 {
     glUniform3f(uniform(name), x, y, z);
