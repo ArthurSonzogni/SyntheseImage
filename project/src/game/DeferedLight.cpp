@@ -121,7 +121,6 @@ void DeferedLight::secondPass()
         sphere.getShader().setUniform("specularMap",3);
         sphere.getShader().setUniform("screenInvDimensions",glm::vec2(1.0/getWidth(),1.0/getHeight()));
 
-        sphere.getShader().setUniform("solidLength",lightSolidLength);
 
         for(unsigned int i = 0; i<nbLight; ++i)
         {
@@ -149,7 +148,7 @@ void DeferedLight::secondPass()
     {
         glEnable(GL_BLEND);
         glBlendEquation(GL_FUNC_REVERSE_SUBTRACT);
-        glBlendFunc(GL_ONE,GL_ONE);
+        glBlendFunc(GL_DST_COLOR,GL_ONE);
         
         static float param0 = 1.0;
         if (Input::isKeyHold(GLFW_KEY_T))
@@ -170,8 +169,8 @@ void DeferedLight::secondPass()
         occlusionObj.getShader().setUniform("colorMap",1);
         occlusionObj.getShader().setUniform("normalMap",2);
         occlusionObj.getShader().setUniform("projection",projection);
-        occlusionObj.getShader().setUniform("param0",param0);
-        occlusionObj.getShader().setUniform("param1",param1);
+        occlusionObj.getShader().setUniform("occlusionIntensity",occlusionIntensity);
+        occlusionObj.getShader().setUniform("occlusionDistance",occlusionDistance);
         occlusionObj.draw();
     }
 
@@ -186,14 +185,18 @@ void DeferedLight::initTwBar()
     ambientPassEnable = true;
     occlusionPassEnable= false;
     reflectionPassEnable = false;
-    lightSolidLength = 0.01;
-    ambientColor = glm::vec3(0.1,0.1,0.1);
+    ambientColor = glm::vec3(0.3,0.3,0.3);
+    occlusionIntensity = 0.9;
+    occlusionDistance = 0.1;
     //TwAddSeparator(menuBar, NULL, " group='shader pass' ");
-    TwAddVarRW(menuBar,"AmbientPass",TW_TYPE_BOOLCPP,&ambientPassEnable,"label=\"ambient pass\" group=\"pass\"");
-    TwAddVarRW(menuBar,"LightPass",TW_TYPE_BOOLCPP,&lightPassEnable,"label=\"light pass\" group=\"pass\"");
-    TwAddVarRW(menuBar,"OcclusionPass",TW_TYPE_BOOLCPP,&occlusionPassEnable,"label=\"occlusion pass\" group=\"pass\"");
-    TwAddVarRW(menuBar,"ReflectionPass",TW_TYPE_BOOLCPP,&reflectionPassEnable,"label=\"reflection pass\" group=\"pass\"");
-    TwAddVarRW(menuBar,"lightSolidLength",TW_TYPE_FLOAT,&lightSolidLength,"label=\"lightSolidLength\" group=\"pass\" min=0.0 max=1.0 step=0.02");
-    TwAddVarRW(menuBar,"ambientColor",TW_TYPE_COLOR3F,&ambientColor,"label=\"ambientColor\" group=\"light\"");
+    TwAddVarRW(menuBar,"AmbientPass",TW_TYPE_BOOLCPP,&ambientPassEnable,"label=\"ambient pass\" group=\"ambient\"");
+    TwAddVarRW(menuBar,"LightPass",TW_TYPE_BOOLCPP,&lightPassEnable,"label=\"light pass\" group=\"light\"");
+    TwAddVarRW(menuBar,"OcclusionPass",TW_TYPE_BOOLCPP,&occlusionPassEnable,"label=\"occlusion pass\" group=\"occlusion\"");
+    TwAddVarRW(menuBar,"ReflectionPass",TW_TYPE_BOOLCPP,&reflectionPassEnable,"label=\"reflection pass\" group=\"reflection\"");
+    TwAddVarRW(menuBar,"ambientColor",TW_TYPE_COLOR3F,&ambientColor,"label=\"ambientColor\" group=\"ambient\"");
+
+
+    TwAddVarRW(menuBar,"occlusionIntensity",TW_TYPE_FLOAT,&occlusionIntensity,"label=\"occlusionIntensity\" group=\"occlusion\" min=0.0 max=10.0 step=0.02");
+    TwAddVarRW(menuBar,"occlusionDistance",TW_TYPE_FLOAT,&occlusionDistance,"label=\"occlusionDistance\" group=\"occlusion\" min=0.0 max=0.7 step=0.001");
 
 }
