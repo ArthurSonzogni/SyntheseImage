@@ -26,6 +26,10 @@ DeferedLight::DeferedLight():
     reflectionObj("obj/screen.obj",ShaderProgram::loadFromFile(
         "shader/ambientReflection.vert",
         "shader/ambientReflection.frag"
+    )),
+    contourObj("obj/screen.obj",ShaderProgram::loadFromFile(
+        "shader/contour.vert",
+        "shader/contour.frag"
     ))
 {
     glCheckError(__FILE__,__LINE__);
@@ -41,12 +45,24 @@ void DeferedLight::secondPass()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glDisable(GL_DEPTH_TEST);
 
+    if (contourPassEnable)
+    {
+        contourObj.getShader().use();
+        contourObj.getShader().setUniform("positionMap",0);
+        contourObj.getShader().setUniform("colorMap",1);
+        contourObj.getShader().setUniform("normalMap",2);
+        contourObj.getShader().setUniform("screenInvDimensions",glm::vec2(1.0/getWidth(),1.0/getHeight()));
+        contourObj.getShader().setUniform("projection",projection);
+        contourObj.getShader().setUniform("view",view);
+        contourObj.getShader().setUniform("contourShadowIntensity",contourShadowIntensity);
+        contourObj.draw();
+    }
     /////////////
     // ambient//
     ///////////
     
     ambientPassEnable^= Input::isKeyPressed(GLFW_KEY_Q);
-    if (ambientPassEnable)
+    if (ambientPassEnable and not contourPassEnable)
     {
         glEnable(GL_BLEND);
         glBlendEquation(GL_FUNC_ADD);
@@ -64,7 +80,7 @@ void DeferedLight::secondPass()
     //////////////
     
     reflectionPassEnable ^= Input::isKeyPressed(GLFW_KEY_R);
-    if (reflectionPassEnable)
+    if (reflectionPassEnable and not contourPassEnable)
     {
 
         glEnable(GL_BLEND);
@@ -94,6 +110,7 @@ void DeferedLight::secondPass()
         reflectionObj.getShader().setUniform("specularMap",3);
         reflectionObj.getShader().setUniform("inverseProjection",glm::inverse(projection));
         reflectionObj.getShader().setUniform("projection",projection);
+        reflectionObj.getShader().setUniform("view",view);
         reflectionObj.draw();
     }
     ///////////
@@ -101,7 +118,7 @@ void DeferedLight::secondPass()
     /////////
     
     lightPassEnable ^= Input::isKeyPressed(GLFW_KEY_L);
-    if (lightPassEnable)
+    if (lightPassEnable and not contourPassEnable)
     {
         glEnable(GL_BLEND);
         glBlendEquation(GL_FUNC_ADD);
@@ -193,6 +210,8 @@ void DeferedLight::initTwBar()
     TwAddVarRW(menuBar,"LightPass",TW_TYPE_BOOLCPP,&lightPassEnable,"label=\"light pass\" group=\"light\"");
     TwAddVarRW(menuBar,"OcclusionPass",TW_TYPE_BOOLCPP,&occlusionPassEnable,"label=\"occlusion pass\" group=\"occlusion\"");
     TwAddVarRW(menuBar,"ReflectionPass",TW_TYPE_BOOLCPP,&reflectionPassEnable,"label=\"reflection pass\" group=\"reflection\"");
+    TwAddVarRW(menuBar,"ContourPass",TW_TYPE_BOOLCPP,&contourPassEnable,"label=\"contourPass\" group=\"contour\"");
+    TwAddVarRW(menuBar,"contourShadowIntensity",TW_TYPE_FLOAT,&contourShadowIntensity,"label=\"contourShadowIntensity\" group=\"contour\" min=0.0 max=10.0 step=0.01");
     TwAddVarRW(menuBar,"ambientColor",TW_TYPE_COLOR3F,&ambientColor,"label=\"ambientColor\" group=\"ambient\"");
 
 

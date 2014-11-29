@@ -81,7 +81,7 @@ void main()
         // distance penalisation
         alpha -= (bestI+bestDI) / maxStep;
         // diffuse orientation
-        alpha *= max(0,dot(texture(normalMap,tpos).xyz,-normal));
+        alpha *= max(0,0.2+0.8*dot(texture(normalMap,tpos).xyz,-normal));
         // specular factor 
         alpha *= 0.5+0.5*specular;
 
