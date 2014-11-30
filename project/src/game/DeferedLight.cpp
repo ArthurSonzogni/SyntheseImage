@@ -147,7 +147,7 @@ void DeferedLight::secondPass()
             sphere.getShader().setUniform("lightPosition",glm::vec3(0.0));
             sphere.getShader().setUniform("lightColor",lights[i].color);
 			sphere.getShader().setUniform("projection",projection);
-			sphere.getShader().setUniform("shadowsEnable",shadowsEnable);
+			sphere.getShader().setUniform("shadowsEnable",shadowsEnable && (!shadowsOnFirstLight || i==0));
             sphere.draw();
         }
 

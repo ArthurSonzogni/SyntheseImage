@@ -247,6 +247,8 @@ void DeferedFirstPass::initTwBar()
 	nbLight = 6;
     shadowsEnable = false;
     TwAddVarRW(menuBar,"enableShadows",TW_TYPE_BOOLCPP,&shadowsEnable,"label=\"Enable Shadows\" group=\"light\"");
+    shadowsOnFirstLight = false;
+    TwAddVarRW(menuBar,"shadowsOnFirstLight",TW_TYPE_BOOLCPP,&shadowsOnFirstLight,"label=\"Shadows on the first light\" group=\"light\"");
     bumpEnable = false;
     TwAddVarRW(menuBar,"enableBump",TW_TYPE_BOOLCPP,&bumpEnable,"label=\"Enable Bump Mapping\" group=\"light\"");
 
