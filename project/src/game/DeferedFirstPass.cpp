@@ -47,6 +47,12 @@ void LoadObjCallback(void *clientData)
 	oas->instance->loadModel(oas->str.c_str());
 }
 
+void LoadGroundCallback(void *clientData)
+{
+	ObjectAndString *oas = (ObjectAndString*)clientData;
+	oas->instance->loadGround(oas->str.c_str());
+}
+
 void LoadTexCallback(void *clientData)
 {
 	ObjectAndString *oas = (ObjectAndString*)clientData;
@@ -71,19 +77,7 @@ DeferedFirstPass::DeferedFirstPass():
     groundNormalTexture(NULL),
     groundSpecularTexture(NULL)
 {
-    string groundFolder = "ground/test/";
-    //string groundFolder = "ground/normal/";
-
-    ground = new ModelObj((groundFolder+"obj.obj").c_str(),ShaderProgram::loadFromFile(
-        "shader/geometryPassBumpMapped.vert",
-        "shader/geometryPassBumpMapped.frag"
-    ));
-    
-    //groundColorTexture = &Texture::loadFromFile("ground/bumpMapped/color.jpg");
-    groundColorTexture = new Texture(Texture::loadFromFile((groundFolder+"color.jpg").c_str()));
-    groundNormalTexture = new Texture(Texture::loadFromFile((groundFolder+"normal.jpg").c_str()));
-    groundSpecularTexture = new Texture(Texture::loadFromFile((groundFolder+"specular.jpg").c_str()));
-
+    loadGround("./ground/normal");
 
     obj = new ModelObj("obj/Charmander.obj",ShaderProgram::loadFromFile(
                 "shader/geometryPass.vert",
@@ -255,12 +249,38 @@ void DeferedFirstPass::initTwBar()
     TwAddVarRW(menuBar,"enableShadows",TW_TYPE_BOOLCPP,&shadowsEnable,"label=\"Enable Shadows\" group=\"light\"");
     bumpEnable = false;
     TwAddVarRW(menuBar,"enableBump",TW_TYPE_BOOLCPP,&bumpEnable,"label=\"Enable Bump Mapping\" group=\"light\"");
+
+    // bumpmapping
+	std::vector<std::string> groundList = directoryListFiles("./ground");
+	for(std::vector<std::string>::iterator it = groundList.begin() ; it != groundList.end() ; it++)
+	{
+		string name = string("./ground/")+it->c_str();
+		const char *desc = (std::string(" label='")+*it+std::string("' group='ground'")).c_str();
+		ObjectAndString *oas = new ObjectAndString;
+		oas->instance = this;
+		oas->str = name.c_str();
+		TwAddButton(menuBar, it->c_str(), &LoadGroundCallback, (void*)oas, desc);
+	}
+
 }
 
 void DeferedFirstPass::loadTexture(const char *fileName)
 {
 	std::string target = std::string("texture/")+std::string(fileName);
 	obj->loadTexture(target.c_str());
+}
+
+void DeferedFirstPass::loadGround(std::string filename)
+{
+    ground = new ModelObj((filename+"/obj.obj").c_str(),ShaderProgram::loadFromFile(
+        "shader/geometryPassBumpMapped.vert",
+        "shader/geometryPassBumpMapped.frag"
+    ));
+    
+    //groundColorTexture = &Texture::loadFromFile("ground/bumpMapped/color.jpg");
+    groundColorTexture = new Texture(Texture::loadFromFile((filename+"/color.jpg").c_str()));
+    groundNormalTexture = new Texture(Texture::loadFromFile((filename+"/normal.jpg").c_str()));
+    groundSpecularTexture = new Texture(Texture::loadFromFile((filename+"/specular.jpg").c_str()));
 }
 
 void DeferedFirstPass::loadModel(const char *fileName)

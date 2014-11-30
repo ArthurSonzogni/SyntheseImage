@@ -19,6 +19,7 @@ class DeferedLight : public DeferedFirstPass
         ModelObj ambientObj;
         ModelObj occlusionObj;
         ModelObj reflectionObj;
+        ModelObj contourObj;
 
         // pass activation
         virtual void initTwBar();
@@ -26,9 +27,15 @@ class DeferedLight : public DeferedFirstPass
         bool ambientPassEnable;
         bool occlusionPassEnable;
         bool reflectionPassEnable;
+        bool contourPassEnable;
 
-        float lightSolidLength;
         glm::vec3 ambientColor;
+        
+        float occlusionIntensity;
+        float occlusionDistance;
+
+        float contourShadowIntensity;
+
 };
 
 #endif /* end of include guard: DeferedLIGHT_DEF*/

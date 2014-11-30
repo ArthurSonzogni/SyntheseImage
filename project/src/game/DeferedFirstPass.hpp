@@ -25,6 +25,8 @@ class DeferedFirstPass : public DeferedBase
             float sphereRadius;
         };
 
+        void loadGround(std::string filename);
+
     protected:
 
         std::vector<Light> lights;
