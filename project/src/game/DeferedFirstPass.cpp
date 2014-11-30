@@ -316,7 +316,7 @@ void DeferedFirstPass::populateLight()
     {
         Light l;
         l.position = glm::vec3(i,0,i);
-        l.radius = 10.f;
+        l.radius = 15.f-2*i;
         l.sphereRadius = 0.4;
         l.color = glm::vec4(glm::rgbColor(glm::vec3(360.f*(i-2)/6,60.f*(i-1),60.0f*i+20)),1.0);
         lights.push_back(l);
