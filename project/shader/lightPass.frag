@@ -54,7 +54,7 @@ void main()
 
 			float scalarProd  = dot(normalize(otherDir),lightDirection);
 
-			if (scalarProd>0.999)
+			if (scalarProd>1-0.001*length(otherDir))
 			{
 				shadowed = true;
 				break;

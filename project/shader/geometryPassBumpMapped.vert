@@ -10,6 +10,7 @@ uniform mat4 view = mat4(1);
 
 out vec3 fPosition;
 out vec2 fTexCoord;
+out vec3 fNormal;
 
 
 void main()
@@ -24,6 +25,7 @@ void main()
 
     fPosition = worldPos.xyz;
     fTexCoord = texCoord;
+    fNormal   = ( view * model * vec4(normal,0.0)).xyz;
 
     gl_Position = projection * worldPos;
 }

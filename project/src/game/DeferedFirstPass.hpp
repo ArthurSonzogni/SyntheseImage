@@ -54,6 +54,7 @@ class DeferedFirstPass : public DeferedBase
         bool animateLightEnable;
         bool lightObjEnable;
 		bool shadowsEnable;
+		bool bumpEnable;
 		unsigned int nbLight;
 
         Texture* groundColorTexture;

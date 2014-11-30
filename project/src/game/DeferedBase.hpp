@@ -16,4 +16,5 @@ class DeferedBase : public Application
         FrameBuffer framebuffer;
         ModelObj screenObj;
 
+		float m_framerate;
 };

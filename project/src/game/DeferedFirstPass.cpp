@@ -135,6 +135,7 @@ void DeferedFirstPass::firstPass()
 
     ground->getShader().use();
     ground->getShader().setUniform("projection",projection);
+    ground->getShader().setUniform("bumpEnable",bumpEnable);
     ground->getShader().setUniform("view",view);
     ground->getShader().setUniform("model",glm::mat4(1.f));
     ground->getShader().setUniform("screenInvDimensions",glm::vec2(1.0/getWidth(),1.0/getHeight()));
@@ -175,6 +176,7 @@ void DeferedFirstPass::firstPass()
 
     obj -> getShader().use();
     obj -> getShader().setUniform("projection",projection);
+    obj -> getShader().setUniform("bumpEnable",bumpEnable);
     obj -> getShader().setUniform("view",view);
     obj -> getShader().setUniform("model",glm::mat4(1.f));
     glm::mat4 objTransform(1.0);
@@ -220,6 +222,7 @@ void DeferedFirstPass::firstPass()
 
 void DeferedFirstPass::initTwBar()
 {
+	TwAddVarRO(menuBar, "framerate", TW_TYPE_FLOAT, &m_framerate, "label='fps'");
 	std::vector<std::string> objList = directoryListFiles("./obj");
 	for(std::vector<std::string>::iterator it = objList.begin() ; it != objList.end() ; it++)
 	{
@@ -250,6 +253,8 @@ void DeferedFirstPass::initTwBar()
 	nbLight = 6;
     shadowsEnable = false;
     TwAddVarRW(menuBar,"enableShadows",TW_TYPE_BOOLCPP,&shadowsEnable,"label=\"Enable Shadows\" group=\"light\"");
+    bumpEnable = false;
+    TwAddVarRW(menuBar,"enableBump",TW_TYPE_BOOLCPP,&bumpEnable,"label=\"Enable Bump Mapping\" group=\"light\"");
 }
 
 void DeferedFirstPass::loadTexture(const char *fileName)
@@ -291,9 +296,9 @@ void DeferedFirstPass::populateLight()
     {
         Light l;
         l.position = glm::vec3(i,0,i);
-        l.radius = 5.f;
+        l.radius = 10.f;
         l.sphereRadius = 0.4;
-        l.color = glm::vec4(glm::rgbColor(glm::vec3(360.f*(i-2)/6,10.0f,10.0f)),1.0);
+        l.color = glm::vec4(glm::rgbColor(glm::vec3(360.f*(i-2)/6,60.f*(i-1),60.0f*i+20)),1.0);
         lights.push_back(l);
     }
 }
