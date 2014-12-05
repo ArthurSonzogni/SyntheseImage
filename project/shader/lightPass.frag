@@ -45,7 +45,7 @@ void main()
 		float rayStepSize = 1.0/maxStep;
 		float shadowed = 0;
 		float bias = 0.0001;
-		int shadowLimit = 10;
+		int shadowLimit = 5;
 		for(int i = 2; i<maxStep; ++i)
 		{
 			// Get position to check
