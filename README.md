@@ -1,8 +1,13 @@
 SyntheseImage
 =============
 
-A school project with advanced OpenGL.
-By @ArthurSonzogni and @Eusmilis
+| | |
+| ------------- | ------------- |
+| What  | School project with advanced OpenGL  |
+| By  |  @ArthurSonzogni and @Eusmilis  |
+| When | Nov 2014 |
+
+
 
 #### Features : 
 - Phong shading
