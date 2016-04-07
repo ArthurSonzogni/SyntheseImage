@@ -2,10 +2,12 @@ SyntheseImage
 =============
 
 | | |
-| ------------- | ------------- |
-| What  | School project with advanced OpenGL  |
-| By  |  @ArthurSonzogni and @Eusmilis  |
-| When | Nov 2014 |
+| ------ | ------------------------------------ |
+| What   | School project with advanced OpenGL  |
+| By     |  @ArthurSonzogni and @Eusmilis       |
+| When   | Nov 2014                             |
+
+
 
 
 
